@@ -1,0 +1,608 @@
+---
+import Layout from "../layouts/Layout.astro";
+import Header from "../components/Header.astro";
+import Footer from "../components/Footer.astro";
+import MobileCallButton from "../components/MobileCallButton.astro";
+import CallToAction from "../components/CallToAction.astro";
+import ServiceHeroArch from "../components/ServiceHeroArch.astro";
+---
+
+<Layout
+  title="Karty i Stojaki NFC do Opinii Google | Kamil Pitner"
+  description="Fizyczne karty zbliżeniowe i stojaki akrylowe NFC z Twoim logo. Pozyskuj autentyczne opinie Google 5★ tuż po wykonaniu usługi – bez żmudnego szukania firmy."
+>
+  <Header />
+
+  <main>
+    <!-- Subpage Hero with 3D Card Preview -->
+    <section class="py-16 md:py-24 bg-[#fef4db]/60 border-b border-[#fde6b3] relative overflow-hidden">
+      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        
+        <!-- Breadcrumb -->
+        <nav class="flex items-center gap-2 text-xs font-semibold text-zinc-500 mb-6" aria-label="Breadcrumb">
+          <a href="/" class="hover:text-zinc-950 transition-colors">Strona główna</a>
+          <span>/</span>
+          <a href="/#opinie-nfc" class="hover:text-zinc-950 transition-colors">Usługi</a>
+          <span>/</span>
+          <span class="text-zinc-900">Opinie NFC</span>
+        </nav>
+
+        <div class="grid grid-cols-1 lg:grid-cols-12 gap-12 items-center">
+          <div class="lg:col-span-7 space-y-6">
+            <h1 class="text-3xl sm:text-5xl lg:text-6xl font-extrabold text-zinc-950 tracking-tight leading-[1.12]">
+              Pozyskuj opinie Google 5★ jednym zbliżeniem telefonu.
+            </h1>
+
+            <p class="text-lg sm:text-xl text-zinc-700 font-normal leading-relaxed">
+              Koniec z proszeniem i czekaniem aż klient sam sobie przypomni o wystawieniu recenzji. Przytknij kartę NFC do smartfona, a formularz opinii otwiera się w 5 sekund.
+            </p>
+
+            <div class="flex flex-col sm:flex-row items-center gap-4 pt-2">
+              <a
+                href="#kontakt"
+                class="w-full sm:w-auto inline-flex items-center justify-center gap-3 px-8 py-4 rounded-2xl bg-zinc-950 text-white text-base font-extrabold shadow-xl hover:bg-zinc-800 transition-all border border-zinc-900 btn-tactile"
+              >
+                <span>Zamów zestaw NFC</span>
+              </a>
+              <a
+                href="/"
+                class="w-full sm:w-auto inline-flex items-center justify-center px-6 py-4 rounded-2xl bg-white text-zinc-800 text-base font-bold hover:bg-zinc-100 border border-zinc-300 transition-all"
+              >
+                <span>← Wróć do strony głównej</span>
+              </a>
+            </div>
+          </div>
+
+          <!-- Hero Graphic Right (Span 5): 3D Service Arch Card (Opinie) -->
+          <div class="lg:col-span-5 reveal-on-scroll delay-100 flex items-center justify-center">
+            <ServiceHeroArch serviceId="opinie" />
+          </div>
+        </div>
+
+      </div>
+    </section>
+
+    <!-- Value Grid: Asymmetric Bento Grid -->
+    <section class="py-20 md:py-28 bg-[#fcfbfa] border-b border-[#e7e5e4]">
+      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div class="max-w-3xl mb-16 reveal-on-scroll">
+          <span class="text-xs font-extrabold uppercase tracking-wider text-zinc-400">Technologia Zbliżeniowa NFC</span>
+          <h2 class="text-3xl sm:text-4xl lg:text-5xl font-extrabold text-zinc-950 tracking-tight mt-1 mb-4">
+            Eliminacja tarcia cyfrowego: dlaczego karty NFC przynoszą 10x więcej opinii?
+          </h2>
+          <p class="text-base sm:text-lg text-zinc-600 leading-relaxed">
+            Tradycyjna prośba o opinię kończy się fiaskiem w 95% przypadków – klient zapomina, nie chce mu się szukać profilu w wyszukiwarce lub gubi się w interfejsie. NFC skraca tę ścieżkę do jednego, natychmiastowego gestu w momencie największego zadowolenia.
+          </p>
+        </div>
+
+        <!-- Asymmetric Bento Grid -->
+        <div class="grid grid-cols-1 md:grid-cols-12 gap-6">
+
+          <!-- Card 1 (Span 7, Light #ffffff): Ścieżka klienta: z 6 kroków do 1 dotknięcia -->
+          <div class="md:col-span-7 p-8 sm:p-10 rounded-3xl bg-white border border-zinc-200 shadow-xs flex flex-col justify-between space-y-6 hover:border-zinc-300 transition-all card-hover-depth reveal-on-scroll delay-100">
+            <div class="space-y-3">
+              <div class="w-10 h-10 rounded-xl bg-zinc-950 text-[#ccff00] flex items-center justify-center shadow-xs">
+                <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5 text-[#ccff00]" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                  <path stroke-linecap="round" stroke-linejoin="round" d="M12 18h.01M8 21h8a2 2 0 002-2V5a2 2 0 00-2-2H8a2 2 0 00-2 2v14a2 2 0 002 2z" />
+                </svg>
+              </div>
+              <h3 class="text-2xl font-extrabold text-zinc-950 tracking-tight">
+                Ścieżka klienta: z 6 uciążliwych kroków do 1 dotknięcia
+              </h3>
+              <p class="text-sm sm:text-base text-zinc-600 leading-relaxed">
+                Gdy zadowolony klient opuszcza Twoją firmę, ma najlepsze intencje. Każda sekunda i konieczność manualnego wpisywania nazwy firmy w wyszukiwarkę drastycznie obniża szansę na recenzję. Karta NFC natychmiast wywołuje oficjalny formularz opinii wprost na ekranie smartfona.
+              </p>
+            </div>
+
+            <!-- Realistic Customer Journey Comparison Widget -->
+            <div class="p-5 rounded-2xl bg-[#fcfbfa] border border-zinc-200 space-y-4 font-sans">
+              <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                <!-- Stara metoda -->
+                <div class="p-4 rounded-xl bg-white border border-zinc-200/80 space-y-2.5">
+                  <div class="flex items-center justify-between">
+                    <span class="text-[11px] font-bold uppercase tracking-wider text-rose-600">Tradycyjna prośba</span>
+                    <span class="text-xs font-bold text-zinc-400">~5% skuteczności</span>
+                  </div>
+                  <ul class="space-y-1.5 text-xs text-zinc-500">
+                    <li class="flex items-center gap-1.5 line-through decoration-zinc-400">
+                      <span class="text-zinc-300 font-mono">01.</span> Powrót do domu i przypomnienie
+                    </li>
+                    <li class="flex items-center gap-1.5 line-through decoration-zinc-400">
+                      <span class="text-zinc-300 font-mono">02.</span> Wpisanie nazwy firmy w Google
+                    </li>
+                    <li class="flex items-center gap-1.5 line-through decoration-zinc-400">
+                      <span class="text-zinc-300 font-mono">03.</span> Wybór właściwego profilu z listy
+                    </li>
+                    <li class="flex items-center gap-1.5 line-through decoration-zinc-400">
+                      <span class="text-zinc-300 font-mono">04.</span> Szukanie zakładki z recenzjami
+                    </li>
+                  </ul>
+                  <div class="pt-1 text-[11px] font-semibold text-zinc-400 border-t border-zinc-100">
+                    Klient rezygnuje na 2. kroku
+                  </div>
+                </div>
+
+                <!-- Nowa metoda NFC -->
+                <div class="p-4 rounded-xl bg-zinc-950 text-white border border-zinc-900 space-y-2.5">
+                  <div class="flex items-center justify-between">
+                    <span class="text-[11px] font-bold uppercase tracking-wider text-[#ccff00]">Karta Zbliżeniowa NFC</span>
+                    <span class="text-xs font-bold text-[#ccff00]">65%+ reakcji</span>
+                  </div>
+                  <div class="space-y-2">
+                    <div class="flex items-center gap-2 text-xs font-medium text-zinc-200">
+                      <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4 text-[#ccff00] shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7" />
+                      </svg>
+                      <span>1. Zbliżenie telefonu do karty</span>
+                    </div>
+                    <div class="flex items-center gap-2 text-xs font-medium text-zinc-200">
+                      <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4 text-[#ccff00] shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7" />
+                      </svg>
+                      <span>2. Otwarte okno opinii z 5★</span>
+                    </div>
+                  </div>
+                  <div class="pt-1 text-[11px] font-bold text-[#ccff00] border-t border-zinc-800">
+                    Opinia wystawiona w 5 sekund na miejscu
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Card 2 (Span 5, Dark #0c0d12): Oprogramowanie w chmurze & Dynamiczny Smart-Link -->
+          <div class="md:col-span-5 p-8 sm:p-10 rounded-3xl bg-zinc-950 text-white shadow-xl flex flex-col justify-between space-y-6 card-hover-depth-dark reveal-on-scroll delay-200">
+            <div class="space-y-3">
+              <div class="w-10 h-10 rounded-xl bg-zinc-900 border border-zinc-800 text-[#ccff00] flex items-center justify-center shadow-xs">
+                <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5 text-[#ccff00]" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                  <path stroke-linecap="round" stroke-linejoin="round" d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10" />
+                </svg>
+              </div>
+              <h3 class="text-2xl font-extrabold tracking-tight text-white">
+                Oprogramowanie w chmurze & Dynamiczny Smart-Link
+              </h3>
+              <p class="text-sm text-zinc-400 leading-relaxed">
+                Fizyczna karta to tylko nośnik – sercem systemu jest dedykowane oprogramowanie. Z poziomu panelu zdalnie zmieniasz cel przekierowania (Google, Booksy, ZnanyLekarz) w ułamku sekundy bez konieczności ponownego drukowania nośników.
+              </p>
+            </div>
+
+            <!-- Cloud Telemetry Widget -->
+            <div class="space-y-3 pt-2 border-t border-zinc-900">
+              <div class="flex items-baseline justify-between">
+                <div>
+                  <div class="text-4xl font-extrabold text-[#ccff00] tabular-nums tracking-tight">&lt; 100 ms</div>
+                  <div class="text-xs text-zinc-400 font-medium mt-0.5">Czas bezpiecznego przekierowania</div>
+                </div>
+                <div class="text-right">
+                  <div class="text-4xl font-extrabold text-white tabular-nums tracking-tight">100%</div>
+                  <div class="text-xs text-zinc-400 font-medium mt-0.5">Zdalna kontrola z Twojego panelu</div>
+                </div>
+              </div>
+              <div class="p-3.5 rounded-xl bg-zinc-900/90 border border-zinc-800/80 flex items-center justify-between text-xs">
+                <div class="flex items-center gap-2 text-zinc-300">
+                  <span class="w-2 h-2 rounded-full bg-[#ccff00] animate-pulse"></span>
+                  <span>Dedykowana chmura, monitoring i serwery 24/7</span>
+                </div>
+                <span class="font-bold text-[#ccff00]">Smart-Link SaaS</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- Card 3 (Span 5, Warm Alabaster #f4f3f0): Dual-Mode NFC + QR -->
+          <div class="md:col-span-5 p-8 sm:p-10 rounded-3xl bg-[#f4f3f0] border border-zinc-200 shadow-xs flex flex-col justify-between space-y-6 hover:border-zinc-300 transition-all card-hover-depth reveal-on-scroll delay-100">
+            <div class="space-y-3">
+              <div class="w-10 h-10 rounded-xl bg-white text-zinc-950 border border-zinc-200 flex items-center justify-center shadow-2xs">
+                <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5 text-zinc-900" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                  <path stroke-linecap="round" stroke-linejoin="round" d="M12 4v1m6 11h2m-6 0h-2v4m0-11v3m0 0h.01M12 12h4.01M16 20h4M4 12h4m12 0h.01M5 8h2a1 1 0 001-1V5a1 1 0 00-1-1H5a1 1 0 00-1 1v2a1 1 0 001 1zm12 0h2a1 1 0 001-1V5a1 1 0 00-1-1h-2a1 1 0 00-1 1v2a1 1 0 001 1zM5 20h2a1 1 0 001-1v-2a1 1 0 00-1-1H5a1 1 0 00-1 1v2a1 1 0 001 1z" />
+                </svg>
+              </div>
+              <h3 class="text-2xl font-extrabold text-zinc-950 tracking-tight">
+                Dual-Mode: Hybryda NFC + mikrodruk kodu QR
+              </h3>
+              <p class="text-sm text-zinc-600 leading-relaxed">
+                Pełna kompatybilność z każdym urządzeniem. Nowe smartfony reagują na dotyk w tle, a dla starszych modeli lub wyłączonego modułu NFC na nośniku znajduje się kontrastowy mikrokod QR o wysokiej korekcji błędów.
+              </p>
+            </div>
+
+            <!-- Dual-Mode Spec Widget -->
+            <div class="p-4 rounded-2xl bg-white border border-zinc-200 space-y-3 font-sans">
+              <div class="flex items-center justify-between text-xs pb-2 border-b border-zinc-100 font-medium">
+                <span class="text-zinc-500">Kanał odczytu</span>
+                <span class="text-zinc-950 font-bold">Zasięg i kompatybilność</span>
+              </div>
+              <div class="space-y-2">
+                <div class="flex items-center justify-between text-xs">
+                  <span class="font-bold text-zinc-900 flex items-center gap-1.5">
+                    <span class="w-1.5 h-1.5 rounded-full bg-zinc-950"></span> Moduł NFC (13.56 MHz)
+                  </span>
+                  <span class="font-semibold text-emerald-700 bg-emerald-50 px-2 py-0.5 rounded border border-emerald-200 text-[11px]">iOS 13+ & Android (zbliżenie)</span>
+                </div>
+                <div class="flex items-center justify-between text-xs">
+                  <span class="font-bold text-zinc-900 flex items-center gap-1.5">
+                    <span class="w-1.5 h-1.5 rounded-full bg-zinc-950"></span> Mikrokod QR (Level H)
+                  </span>
+                  <span class="font-semibold text-zinc-700 bg-zinc-100 px-2 py-0.5 rounded text-[11px]">Aparat foto (starsze modele)</span>
+                </div>
+              </div>
+              <div class="pt-1.5 text-[11px] text-zinc-500 border-t border-zinc-100">
+                100% klientów obsłużonych bez pytania o model telefonu.
+              </div>
+            </div>
+          </div>
+
+          <!-- Card 4 (Span 7, Light #ffffff): Bezpośredni deep-link do okna oceny z 5 gwiazdkami -->
+          <div class="md:col-span-7 p-8 sm:p-10 rounded-3xl bg-white border border-zinc-200 shadow-xs flex flex-col justify-between space-y-6 hover:border-zinc-300 transition-all card-hover-depth reveal-on-scroll delay-200">
+            <div class="space-y-3">
+              <div class="w-10 h-10 rounded-xl bg-zinc-950 text-[#ccff00] flex items-center justify-center shadow-xs">
+                <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5 text-[#ccff00]" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                  <path stroke-linecap="round" stroke-linejoin="round" d="M13.828 10.172a4 4 0 00-5.656 0l-4 4a4 4 0 105.656 5.656l1.102-1.101m-.758-4.899a4 4 0 005.656 0l4-4a4 4 0 00-5.656-5.656l-1.1 1.1" />
+                </svg>
+              </div>
+              <h3 class="text-2xl font-extrabold text-zinc-950 tracking-tight">
+                Bezpośredni deep-link: okno oceny z 5 gwiazdkami
+              </h3>
+              <p class="text-sm sm:text-base text-zinc-600 leading-relaxed">
+                Karta nie odsyła do ogólnej strony internetowej ani do listy opinii, gdzie klient musiałby szukać przycisku. Precyzyjnie zakodowany Place ID natychmiast inicjuje natywne okno dodawania oceny z zaznaczonymi 5 gwiazdkami.
+              </p>
+            </div>
+
+            <!-- Google Review Modal Mockup Widget -->
+            <div class="p-5 rounded-2xl bg-[#fcfbfa] border border-zinc-200 space-y-3 font-sans">
+              <div class="p-4 rounded-xl bg-white border border-zinc-200 shadow-xs space-y-3">
+                <div class="flex items-center justify-between">
+                  <div class="flex items-center gap-2.5">
+                    <div class="w-8 h-8 rounded-full bg-zinc-950 text-[#ccff00] flex items-center justify-center font-bold text-xs">
+                      G
+                    </div>
+                    <div>
+                      <div class="text-xs font-bold text-zinc-950 leading-tight">Twoja Firma Usługowa</div>
+                      <div class="text-[10px] text-zinc-500">Opinia publiczna w Mapach Google</div>
+                    </div>
+                  </div>
+                  <span class="text-[10px] font-bold text-emerald-700 bg-emerald-50 px-2 py-0.5 rounded border border-emerald-200">
+                    Natywne okno oceny
+                  </span>
+                </div>
+
+                <!-- 5 Gold Stars SVG -->
+                <div class="py-1 flex items-center justify-center gap-2">
+                  {[1, 2, 3, 4, 5].map(() => (
+                    <svg xmlns="http://www.w3.org/2000/svg" class="w-7 h-7 text-amber-400 fill-current" viewBox="0 0 20 20">
+                      <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
+                    </svg>
+                  ))}
+                </div>
+
+                <!-- Input dummy -->
+                <div class="p-2.5 rounded-lg bg-zinc-50 border border-zinc-200 text-xs text-zinc-400 italic">
+                  Podziel się wrażeniami z profesjonalnej obsługi...
+                </div>
+
+                <div class="flex items-center justify-between pt-1">
+                  <span class="text-[10px] text-zinc-400 font-medium">Oficjalny interfejs Google</span>
+                  <div class="px-4 py-1.5 rounded-lg bg-blue-600 text-white text-xs font-bold shadow-2xs">
+                    Opublikuj
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+        </div>
+
+        <!-- 3-Pillar Supporting Strip -->
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mt-6 reveal-on-scroll delay-300">
+          <div class="p-6 rounded-2xl bg-white border border-zinc-200 shadow-xs flex items-start gap-4">
+            <div class="w-10 h-10 rounded-xl bg-zinc-100 text-zinc-950 flex items-center justify-center shrink-0">
+              <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5 text-zinc-900" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M13 7h8m0 0v8m0-8l-8 8-4-4-6 6" />
+              </svg>
+            </div>
+            <div>
+              <h4 class="font-extrabold text-zinc-950 text-base mb-1">Skok w rankingu Local 3-Pack</h4>
+              <p class="text-xs sm:text-sm text-zinc-600 leading-relaxed">Algorytm faworyzuje profile, które regularnie zbierają autentyczne opinie bezpośrednio z lokalizacji firmy.</p>
+            </div>
+          </div>
+
+          <div class="p-6 rounded-2xl bg-white border border-zinc-200 shadow-xs flex items-start gap-4">
+            <div class="w-10 h-10 rounded-xl bg-zinc-100 text-zinc-950 flex items-center justify-center shrink-0">
+              <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5 text-zinc-900" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z" />
+              </svg>
+            </div>
+            <div>
+              <h4 class="font-extrabold text-zinc-950 text-base mb-1">Blokada Lock-Byte</h4>
+              <p class="text-xs sm:text-sm text-zinc-600 leading-relaxed">Chipy programuję z permanentną blokadą zapisu. Nikt niepowołany nie może nadpisać ani podmienić Twojego linku.</p>
+            </div>
+          </div>
+
+          <div class="p-6 rounded-2xl bg-white border border-zinc-200 shadow-xs flex items-start gap-4">
+            <div class="w-10 h-10 rounded-xl bg-zinc-100 text-zinc-950 flex items-center justify-center shrink-0">
+              <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5 text-zinc-900" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M15 7a2 2 0 012 2m4 0a6 6 0 01-7.743 5.743L11 17H9v2H7v2H4a1 1 0 01-1-1v-2.586a1 1 0 01.293-.707l5.964-5.964A6 6 0 1121 9z" />
+              </svg>
+            </div>
+            <div>
+              <h4 class="font-extrabold text-zinc-950 text-base mb-1">Fizyczne nośniki na własność</h4>
+              <p class="text-xs sm:text-sm text-zinc-600 leading-relaxed">Karty, stojaki i tagi z Twoim logo przechodzą na zawsze na Twoją własność. W abonamencie płacisz wyłącznie za stabilne utrzymanie oprogramowania w chmurze, serwerów i panelu zarządzania.</p>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </section>
+
+    <!-- Carrier Formats Section -->
+    <section class="py-20 md:py-28 bg-white border-b border-[#e7e5e4]">
+      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        
+        <!-- Section Heading for Formats -->
+        <div class="max-w-3xl mb-16 reveal-on-scroll">
+          <span class="text-xs font-extrabold uppercase tracking-wider text-zinc-400">Formaty Fizyczne</span>
+          <h2 class="text-3xl sm:text-4xl lg:text-5xl font-extrabold text-zinc-950 tracking-tight mt-1 mb-4">
+            Wybierz nośnik dopasowany do specyfiki Twojej pracy
+          </h2>
+          <p class="text-base sm:text-lg text-zinc-600 leading-relaxed">
+            Wszystkie nośniki programuję indywidualnie pod Twój Profil Firmy w Google (lub Booksy / ZnanyLekarz) i znakuję pełną identyfikacją wizualną Twojej marki z trwałym laminatem ochronnym.
+          </p>
+        </div>
+
+        <!-- 3 Format Cards -->
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-8 mb-12">
+          <!-- Card 1: Karty Portfelowe PVC -->
+          <div class="p-8 sm:p-9 rounded-3xl bg-[#fcfbfa] border border-zinc-200 shadow-xs flex flex-col justify-between hover:border-zinc-300 hover:shadow-md transition-all card-hover-depth reveal-on-scroll delay-100">
+            <div>
+              <div class="w-12 h-12 rounded-2xl bg-zinc-950 text-[#ccff00] flex items-center justify-center mb-6 shadow-xs">
+                <svg xmlns="http://www.w3.org/2000/svg" class="w-6 h-6 text-[#ccff00]" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                  <rect x="2" y="5" width="20" height="14" rx="2" />
+                  <line x1="2" y1="10" x2="22" y2="10" />
+                </svg>
+              </div>
+              <h3 class="text-2xl font-extrabold text-zinc-950 mb-1 tracking-tight">Karty Portfelowe PVC</h3>
+              <p class="text-xs text-zinc-500 mb-4 font-semibold uppercase tracking-wider">Format ID-1 (Karta bankowa 0.76 mm)</p>
+              <p class="text-sm text-zinc-600 leading-relaxed mb-6">
+                Kompaktowa karta mieszcząca się w każdym portfelu lub etui. Idealna do natychmiastowego wręczenia klientowi w momencie odbioru auta, zakończenia naprawy lub finalizacji transakcji.
+              </p>
+              <ul class="space-y-3 text-xs text-zinc-700 mb-8 font-medium">
+                <li class="flex items-center gap-2.5">
+                  <span class="w-4 h-4 rounded-full bg-zinc-950 text-[#ccff00] flex items-center justify-center font-bold text-[10px] shrink-0">✓</span>
+                  <span>Błyskawiczny odczyt przez grube etui telefonu</span>
+                </li>
+                <li class="flex items-center gap-2.5">
+                  <span class="w-4 h-4 rounded-full bg-zinc-950 text-[#ccff00] flex items-center justify-center font-bold text-[10px] shrink-0">✓</span>
+                  <span>Dwustronny nadruk UV z Twoim logo i kolorystyką</span>
+                </li>
+                <li class="flex items-center gap-2.5">
+                  <span class="w-4 h-4 rounded-full bg-zinc-950 text-[#ccff00] flex items-center justify-center font-bold text-[10px] shrink-0">✓</span>
+                  <span>Trwały laminat odporny na ścieranie i wilgoć</span>
+                </li>
+              </ul>
+            </div>
+            <div class="pt-5 border-t border-zinc-200 text-xs text-zinc-500">
+              <span class="font-bold text-zinc-950">Dedykowane dla:</span> Handlowców, serwisantów, monterów, kurierów
+            </div>
+          </div>
+
+          <!-- Card 2: Stojaki Akrylowe na Ladę -->
+          <div class="p-8 sm:p-9 rounded-3xl bg-[#fcfbfa] border border-zinc-200 shadow-xs flex flex-col justify-between hover:border-zinc-300 hover:shadow-md transition-all card-hover-depth reveal-on-scroll delay-200">
+            <div>
+              <div class="w-12 h-12 rounded-2xl bg-zinc-950 text-[#ccff00] flex items-center justify-center mb-6 shadow-xs">
+                <svg xmlns="http://www.w3.org/2000/svg" class="w-6 h-6 text-[#ccff00]" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                  <path stroke-linecap="round" stroke-linejoin="round" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4" />
+                </svg>
+              </div>
+              <h3 class="text-2xl font-extrabold text-zinc-950 mb-1 tracking-tight">Stojaki Akrylowe na Ladę</h3>
+              <p class="text-xs text-zinc-500 mb-4 font-semibold uppercase tracking-wider">Ekspozytor Dual-Mode: NFC + Mikrokod QR</p>
+              <p class="text-sm text-zinc-600 leading-relaxed mb-6">
+                Elegancki, stabilny ekspozytor na recepcję, blat lub stolik. Przyciąga wzrok klienta w momencie, gdy czeka na wydanie paragonu, rachunku lub kluczyków.
+              </p>
+              <ul class="space-y-3 text-xs text-zinc-700 mb-8 font-medium">
+                <li class="flex items-center gap-2.5">
+                  <span class="w-4 h-4 rounded-full bg-zinc-950 text-[#ccff00] flex items-center justify-center font-bold text-[10px] shrink-0">✓</span>
+                  <span>Odlewany akryl PMMA premium o grubości 3 mm</span>
+                </li>
+                <li class="flex items-center gap-2.5">
+                  <span class="w-4 h-4 rounded-full bg-zinc-950 text-[#ccff00] flex items-center justify-center font-bold text-[10px] shrink-0">✓</span>
+                  <span>Podwójny kanał: zbliżenie NFC lub szybki skan QR</span>
+                </li>
+                <li class="flex items-center gap-2.5">
+                  <span class="w-4 h-4 rounded-full bg-zinc-950 text-[#ccff00] flex items-center justify-center font-bold text-[10px] shrink-0">✓</span>
+                  <span>Niewzruszona stabilność na blacie i odporność na UV</span>
+                </li>
+              </ul>
+            </div>
+            <div class="pt-5 border-t border-zinc-200 text-xs text-zinc-500">
+              <span class="font-bold text-zinc-950">Dedykowane dla:</span> Salonów beauty, gabinetów lekarskich, hoteli, recepcji
+            </div>
+          </div>
+
+          <!-- Card 3: Tagi Samoprzylepne Anti-Metal -->
+          <div class="p-8 sm:p-9 rounded-3xl bg-[#fcfbfa] border border-zinc-200 shadow-xs flex flex-col justify-between hover:border-zinc-300 hover:shadow-md transition-all card-hover-depth reveal-on-scroll delay-300">
+            <div>
+              <div class="w-12 h-12 rounded-2xl bg-zinc-950 text-[#ccff00] flex items-center justify-center mb-6 shadow-xs">
+                <svg xmlns="http://www.w3.org/2000/svg" class="w-6 h-6 text-[#ccff00]" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                  <path stroke-linecap="round" stroke-linejoin="round" d="M7 7h.01M7 3h5c.512 0 1.024.195 1.414.586l7 7a2 2 0 010 2.828l-7 7a2 2 0 01-2.828 0l-7-7A1.994 1.994 0 013 12V7a4 4 0 014-4z" />
+                </svg>
+              </div>
+              <h3 class="text-2xl font-extrabold text-zinc-950 mb-1 tracking-tight">Tagi Samoprzylepne Anti-Metal</h3>
+              <p class="text-xs text-zinc-500 mb-4 font-semibold uppercase tracking-wider">Warstwa ferrytowa pod powierzchnie metalowe</p>
+              <p class="text-sm text-zinc-600 leading-relaxed mb-6">
+                Dyskretne krążki samoprzylepne z izolacją ferrytową. Działają bezpośrednio na metalowych obudowach terminali, stolikach i maszynach bez tłumienia sygnału radiowego.
+              </p>
+              <ul class="space-y-3 text-xs text-zinc-700 mb-8 font-medium">
+                <li class="flex items-center gap-2.5">
+                  <span class="w-4 h-4 rounded-full bg-zinc-950 text-[#ccff00] flex items-center justify-center font-bold text-[10px] shrink-0">✓</span>
+                  <span>Specjalna warstwa ferrytowa ekranująca metal</span>
+                </li>
+                <li class="flex items-center gap-2.5">
+                  <span class="w-4 h-4 rounded-full bg-zinc-950 text-[#ccff00] flex items-center justify-center font-bold text-[10px] shrink-0">✓</span>
+                  <span>Wodoodporność IP67 (odporność na zmywanie i chemię)</span>
+                </li>
+                <li class="flex items-center gap-2.5">
+                  <span class="w-4 h-4 rounded-full bg-zinc-950 text-[#ccff00] flex items-center justify-center font-bold text-[10px] shrink-0">✓</span>
+                  <span>Przemysłowa błona klejowa 3M VHB o wysokiej sile spoiny</span>
+                </li>
+              </ul>
+            </div>
+            <div class="pt-5 border-t border-zinc-200 text-xs text-zinc-500">
+              <span class="font-bold text-zinc-950">Dedykowane dla:</span> Terminali płatniczych, kawiarni, warsztatów, witryn
+            </div>
+          </div>
+        </div>
+
+        <!-- Informative Dispatch Card (Flows to #kontakt without phone callouts) -->
+        <div class="p-8 sm:p-10 rounded-3xl bg-[#f4f3f0] border border-zinc-200 flex flex-col lg:flex-row items-center justify-between gap-8 reveal-on-scroll">
+          <div class="space-y-2 max-w-2xl">
+            <span class="text-xs font-extrabold uppercase tracking-wider text-zinc-400">Sprzęt na własność + Oprogramowanie w abonamencie</span>
+            <h4 class="text-2xl font-extrabold text-zinc-950 tracking-tight">Otrzymujesz fizyczne nośniki z Twoim logo i dostęp do panelu w chmurze</h4>
+            <p class="text-sm sm:text-base text-zinc-600 leading-relaxed">
+              Fizyczne nośniki przechodzą na zawsze na Twoją własność. W ramach stałego abonamentu otrzymujesz dostęp do panelu zarządzania, ultra-szybkich serwerów przekierowań, statystyk zbliżeń oraz możliwość zdalnej zmiany profilu w dowolnym momencie.
+            </p>
+          </div>
+          <div class="shrink-0 w-full sm:w-auto">
+            <a
+              href="#kontakt"
+              class="w-full sm:w-auto inline-flex items-center justify-center gap-3 px-8 py-4 rounded-2xl bg-zinc-950 text-white text-base font-extrabold shadow-xl hover:bg-zinc-800 transition-all border border-zinc-900 btn-tactile"
+            >
+              <span>Skonfiguruj swój zestaw NFC</span>
+              <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4 text-[#ccff00]" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M19 14l-7 7m0 0l-7-7m7 7V3" />
+              </svg>
+            </a>
+          </div>
+        </div>
+
+      </div>
+    </section>
+
+    <!-- 3-Step Process: Connected Timeline -->
+    <section class="py-20 md:py-28 bg-[#f4f3f0] border-b border-[#e7e5e4]">
+      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div class="max-w-3xl mx-auto text-center mb-16 reveal-on-scroll">
+          <span class="text-xs font-extrabold uppercase tracking-wider text-zinc-400">Przejrzysty Proces</span>
+          <h2 class="text-3xl sm:text-4xl lg:text-5xl font-extrabold text-zinc-950 tracking-tight mt-1 mb-4">
+            Jak wygląda zamówienie i wdrożenie zestawu NFC?
+          </h2>
+          <p class="text-base sm:text-lg text-zinc-600 max-w-2xl mx-auto leading-relaxed">
+            Od podania nazwy firmy do pierwszych 5 gwiazdek na Twoim profilu. Cały proces techniczny leży po mojej stronie.
+          </p>
+        </div>
+
+        <!-- Connected Timeline Grid -->
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-6 relative">
+          <!-- Step 1 -->
+          <div class="p-8 sm:p-9 rounded-3xl bg-white border border-zinc-200 shadow-sm flex flex-col justify-between space-y-5 process-step-card reveal-on-scroll delay-100">
+            <div class="flex items-center justify-between border-b border-zinc-100 pb-4">
+              <span class="w-9 h-9 rounded-full bg-zinc-950 text-white flex items-center justify-center text-sm font-extrabold">1</span>
+              <span class="text-xs font-bold text-zinc-500">Dzień 1</span>
+            </div>
+            <div>
+              <h3 class="text-xl font-extrabold text-zinc-950 tracking-tight mb-2">Konfiguracja chmury, Smart-Linka i wizualizacja</h3>
+              <p class="text-sm text-zinc-600 leading-relaxed">
+                Podajesz nazwę swojej wizytówki w Google (lub Booksy / ZnanyLekarz). Konfiguruję profil w oprogramowaniu chmurowym, generuję dedykowany Smart-Link i przygotowuję projekt nośników z Twoim logo do akceptacji.
+              </p>
+            </div>
+            <div class="text-xs font-bold text-zinc-400 tabular-nums">KROK 01</div>
+          </div>
+
+          <!-- Step 2 -->
+          <div class="p-8 sm:p-9 rounded-3xl bg-white border border-zinc-200 shadow-sm flex flex-col justify-between space-y-5 process-step-card reveal-on-scroll delay-200">
+            <div class="flex items-center justify-between border-b border-zinc-100 pb-4">
+              <span class="w-9 h-9 rounded-full bg-zinc-950 text-white flex items-center justify-center text-sm font-extrabold">2</span>
+              <span class="text-xs font-bold text-zinc-500">Dzień 2–3</span>
+            </div>
+            <div>
+              <h3 class="text-xl font-extrabold text-zinc-950 tracking-tight mb-2">Znakowanie UV i programowanie chipów NFC</h3>
+              <p class="text-sm text-zinc-600 leading-relaxed">
+                Drukujemy nośniki na maszynach UV o wysokiej odporności mechanicznej. Programujemy chipy NTAG215 i parujemy je z Twoim panelem zarządzania w chmurze.
+              </p>
+            </div>
+            <div class="text-xs font-bold text-zinc-400 tabular-nums">KROK 02</div>
+          </div>
+
+          <!-- Step 3 -->
+          <div class="p-8 sm:p-9 rounded-3xl bg-white border border-zinc-200 shadow-sm flex flex-col justify-between space-y-5 process-step-card reveal-on-scroll delay-300">
+            <div class="flex items-center justify-between border-b border-zinc-100 pb-4">
+              <span class="w-9 h-9 rounded-full bg-[#ccff00] text-zinc-950 flex items-center justify-center text-sm font-extrabold">3</span>
+              <span class="text-xs font-bold text-zinc-700">Dzień 4–5</span>
+            </div>
+            <div>
+              <h3 class="text-xl font-extrabold text-zinc-950 tracking-tight mb-2">Dostawa nośników, dostęp do panelu i wdrożenie</h3>
+              <p class="text-sm text-zinc-600 leading-relaxed">
+                Otrzymujesz gotowy pakiet nośników prosto do rąk oraz dane logowania do panelu chmurowego. Wyciągasz z pudełka i natychmiast zbierasz pierwsze recenzje.
+              </p>
+            </div>
+            <div class="text-xs font-bold text-zinc-950 tabular-nums">KROK 03</div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Service Specific FAQ: Semantic Accordion -->
+    <section class="py-20 md:py-28 bg-white border-b border-[#e7e5e4]">
+      <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div class="text-center mb-14">
+          <span class="text-xs font-extrabold uppercase tracking-wider text-zinc-400">Baza Wiedzy</span>
+          <h2 class="text-3xl sm:text-4xl lg:text-5xl font-extrabold text-zinc-950 tracking-tight mt-1 mb-4">
+            Pytania i odpowiedzi o technologię NFC
+          </h2>
+          <p class="text-base sm:text-lg text-zinc-600 leading-relaxed">
+            Wszystko, co musisz wiedzieć o kompatybilności smartfonów, zasadach działania i regulaminie Google.
+          </p>
+        </div>
+
+        <!-- FAQ Accordion List using semantic details/summary -->
+        <div class="space-y-4">
+          {[
+            {
+              q: "Czy klient musi mieć zainstalowaną specjalną aplikację, aby zbliżyć telefon?",
+              a: "Nie. W tym tkwi największa przewaga technologii NFC. Wszystkie współczesne smartfony z systemem Android oraz iPhone (od modelu Xs w górę) posiadają natywne czytniki NFC wbudowane w system operacyjny. Wystarczy, że ekran telefonu jest wybudzony – po zbliżeniu karty telefon natychmiast wyświetla baner otwierający formularz opinii w przeglądarce lub aplikacji Google. Klient nie musi instalować absolutnie żadnej aplikacji ani niczego konfigurować."
+            },
+            {
+              q: "Co w sytuacji, gdy klient posiada starszy telefon lub wyłączony moduł NFC?",
+              a: "Właśnie dlatego wszystkie nośniki wykonuję w standardzie Dual-Mode. Na rewersie karty portfelowej oraz na froncie stojaka akrylowego znajduje się precyzyjny, kontrastowy mikrokod QR o wysokim poziomie korekcji błędów (Level H). Klient ze starszym smartfonem uruchamia zwykły aparat fotograficzny i kieruje obiektyw na kod – formularz otwiera się identycznie w 2 sekundy."
+            },
+            {
+              q: "Jak wygląda model rozliczenia i dlaczego usługa obejmuje abonament?",
+              a: "Model składa się z dwóch elementów: jednorazowego zakupu fizycznych nośników (karty, stojaki i tagi z Twoim logo przechodzą na zawsze na Twoją własność) oraz przejrzystego abonamentu na utrzymanie oprogramowania w chmurze. Abonament pokrywa ultra-szybkie serwery przekierowań 24/7, dostęp do Twojego panelu, możliwość zdalnej zmiany docelowego profilu (np. z Google na Booksy czy ZnanyLekarz) bez wymiany kart, statystyki zbliżeń oraz stały monitoring działania i bezpieczeństwa."
+            },
+            {
+              q: "Czy zbieranie opinii przez karty NFC jest zgodne z regulaminem Google?",
+              a: "W 100% tak. Karta NFC jest fizycznym skrótem klawiaturowym – otwiera oficjalny, w pełni publiczny formularz dodawania recenzji w Google. Klient sam loguje się na swoje konto Google i osobiście wystawia gwiazdki oraz komentarz ze swojego urządzenia i swojego adresu IP. Jest to najbardziej autentyczna i bezpieczna metoda budowania reputacji, w pełni rekomendowana przez standardy rynkowe."
+            },
+            {
+              q: "Co się stanie, jeśli w przyszłości zmienię nazwę firmy, adres lub portal do zbierania opinii?",
+              a: "Dzięki oprogramowaniu chmurowemu i dynamicznym linkom nie musisz wyrzucać nośników ani zamawiać nowych kart. Logujesz się do swojego panelu i w 5 sekund zmieniasz adres docelowy – możesz przekierować ruch na nowy profil Google, konto Booksy, profil na ZnanyLekarz czy social media. Wszystkie fizyczne karty i stojaki natychmiast zaczną kierować klientów w nowe miejsce bez konieczności ponownego kodowania."
+            },
+            {
+              q: "Jak personel powinien zachęcać klientów do zbliżenia telefonu, aby nie było to niezręczne?",
+              a: "Najlepszy moment to chwila uregulowania rachunku, wręczenia kluczyków czy zakończenia wizyty, gdy klient jest pod wrażeniem wykonanej usługi. Wystarczy naturalne, krótkie zdanie: „Pani Mario, cieszymy się, że efekt się podoba! Jeśli ma Pani 5 sekund, wystarczy przyłożyć telefon do tej karty, aby zostawić nam gwiazdki w Google – to dla nas ogromne wsparcie”. Ponad 65% zadowolonych klientów reaguje natychmiast i z uśmiechem przykłada telefon."
+            }
+          ].map((faq, index) => (
+            <details class="group rounded-2xl border border-zinc-200 bg-white p-6 transition-all duration-200 hover:border-zinc-400 [&_summary::-webkit-details-marker]:hidden" open={index === 0}>
+              <summary class="flex cursor-pointer items-center justify-between gap-4 font-bold text-lg sm:text-xl text-zinc-950 select-none">
+                <span class="flex items-center gap-3">
+                  <span class="text-xs text-zinc-400 font-semibold tabular-nums">0{index + 1}.</span>
+                  <span>{faq.q}</span>
+                </span>
+                <span class="w-8 h-8 rounded-full bg-zinc-100 text-zinc-700 flex items-center justify-center shrink-0 group-open:rotate-180 transition-transform group-hover:bg-[#ccff00] group-hover:text-zinc-950">
+                  <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M19 9l-7 7-7-7" />
+                  </svg>
+                </span>
+              </summary>
+              <div class="mt-4 pt-4 border-t border-zinc-100 text-zinc-600 text-base leading-relaxed pl-7">
+                {faq.a}
+              </div>
+            </details>
+          ))}
+        </div>
+      </div>
+    </section>
+
+    <CallToAction />
+  </main>
+
+  <MobileCallButton />
+  <Footer />
+</Layout>

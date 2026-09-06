@@ -1,0 +1,683 @@
+---
+interface Props {
+  className?: string;
+}
+
+const { className = "" } = Astro.props;
+---
+
+<div class={`relative w-full h-[400px] sm:h-[460px] lg:h-[500px] xl:h-[540px] flex items-center justify-center select-none ${className}`} id="nfc-3d-wrapper">
+  <!-- Subtle soft ambient floor shadow under the card -->
+  <div class="absolute bottom-10 left-1/2 -translate-x-1/2 w-3/4 max-w-sm h-8 bg-zinc-900/10 rounded-full blur-2xl pointer-events-none"></div>
+
+  <!-- Loading placeholder -->
+  <div id="nfc-3d-loader" class="absolute inset-0 flex flex-col items-center justify-center gap-3 bg-transparent text-zinc-600 z-20 transition-opacity duration-500">
+    <div class="w-8 h-8 rounded-full border-2 border-zinc-300 border-t-zinc-900 animate-spin"></div>
+    <span class="text-xs text-zinc-500 font-medium">Ładowanie modelu 3D...</span>
+  </div>
+
+  <!-- WebGL Canvas directly on page background -->
+  <canvas id="nfc-3d-canvas" class="w-full h-full cursor-grab active:cursor-grabbing block touch-none"></canvas>
+
+  <!-- Interactive Hint (Center bottom) -->
+  <div id="nfc-3d-hint" class="absolute bottom-4 left-1/2 -translate-x-1/2 z-10 pointer-events-none px-4 py-1.5 rounded-full bg-white/90 border border-[#e7e5e4] text-zinc-600 text-xs font-medium tracking-wide flex items-center gap-2 shadow-xs backdrop-blur-md transition-opacity duration-300">
+    <svg xmlns="http://www.w3.org/2000/svg" class="w-3.5 h-3.5 text-zinc-800 animate-bounce" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5">
+      <path stroke-linecap="round" stroke-linejoin="round" d="M7 11.5V14m0-2.5v-6a1.5 1.5 0 113 0m-3 6a1.5 1.5 0 00-3 0v2a7.5 7.5 0 0015 0v-5a1.5 1.5 0 00-3 0m-6-3V11m0-5.5v-1a1.5 1.5 0 013 0v1m0 0V11m0-5.5a1.5 1.5 0 013 0v3m0 0V11" />
+    </svg>
+    <span>Przeciągnij, aby obrócić 360°</span>
+  </div>
+
+  <!-- Flip Controls (Top right) -->
+  <div class="absolute top-4 right-4 z-10 flex items-center gap-2">
+    <button
+      id="nfc-flip-btn"
+      type="button"
+      class="px-3.5 py-1.5 rounded-full bg-white/90 hover:bg-white text-zinc-800 text-xs font-semibold border border-[#e7e5e4] shadow-xs backdrop-blur-md transition-all active:scale-95 flex items-center gap-1.5 cursor-pointer"
+      title="Obróć kartę na drugą stronę"
+    >
+      <svg xmlns="http://www.w3.org/2000/svg" class="w-3.5 h-3.5 text-zinc-800" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+        <path stroke-linecap="round" stroke-linejoin="round" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15" />
+      </svg>
+      <span>Obróć stronę</span>
+    </button>
+
+    <button
+      id="nfc-reset-btn"
+      type="button"
+      class="p-1.5 rounded-full bg-white/90 hover:bg-white text-zinc-500 hover:text-zinc-800 border border-[#e7e5e4] shadow-xs backdrop-blur-md transition-all active:scale-95 cursor-pointer"
+      title="Zresetuj pozycję"
+    >
+      <svg xmlns="http://www.w3.org/2000/svg" class="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+        <path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12" />
+      </svg>
+    </button>
+  </div>
+</div>
+
+<script>
+  function setupLazyNfc3D() {
+    const canvas = document.getElementById("nfc-3d-canvas") as HTMLCanvasElement | null;
+    if (!canvas) return;
+
+    let hasLoaded = false;
+    const lazyObserver = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          if (entry.isIntersecting && !hasLoaded) {
+            hasLoaded = true;
+            lazyObserver.disconnect();
+            import("three")
+              .then((THREE) => {
+                initNfc3DScene(THREE);
+              })
+              .catch((err) => {
+                console.error("Błąd ładowania Three.js:", err);
+                const loader = document.getElementById("nfc-3d-loader");
+                if (loader) {
+                  loader.innerHTML = `
+                    <div class="text-xs text-zinc-400 font-sans text-center p-4">
+                      <p class="text-zinc-300 font-bold mb-1">Interaktywny Model 3D</p>
+                      <p class="text-[11px] text-zinc-500">Odśwież stronę (Ctrl+F5), aby zaktualizować pamięć podręczną modułów</p>
+                    </div>
+                  `;
+                }
+              });
+          }
+        });
+      },
+      { rootMargin: "250px" }
+    );
+
+    lazyObserver.observe(canvas);
+  }
+
+  function initNfc3DScene(THREE: typeof import("three")) {
+    const canvas = document.getElementById("nfc-3d-canvas") as HTMLCanvasElement | null;
+    const loader = document.getElementById("nfc-3d-loader");
+    const hint = document.getElementById("nfc-3d-hint");
+    const flipBtn = document.getElementById("nfc-flip-btn");
+    const resetBtn = document.getElementById("nfc-reset-btn");
+
+    if (!canvas) return;
+
+    // Check prefers-reduced-motion
+    const prefersReducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+
+    // 1. Create Textures on Offscreen 2D Canvases
+    function createFrontTexture(): import("three").CanvasTexture {
+      const texCanvas = document.createElement("canvas");
+      texCanvas.width = 1024;
+      texCanvas.height = 645; // standard card ratio 1.586
+      const ctx = texCanvas.getContext("2d")!;
+
+      // Deep Matte Dark Background
+      ctx.fillStyle = "#09090b";
+      ctx.fillRect(0, 0, 1024, 645);
+
+      // Subtle high-tech diagonal grid watermark
+      ctx.strokeStyle = "rgba(255, 255, 255, 0.03)";
+      ctx.lineWidth = 1;
+      for (let x = -645; x < 1024; x += 32) {
+        ctx.beginPath();
+        ctx.moveTo(x, 0);
+        ctx.lineTo(x + 645, 645);
+        ctx.stroke();
+      }
+
+
+      // Header: KP Brand Monogram
+      ctx.fillStyle = "#18181b";
+      ctx.beginPath();
+      ctx.roundRect(60, 50, 76, 76, 18);
+      ctx.fill();
+      ctx.strokeStyle = "#27272a";
+      ctx.lineWidth = 2;
+      ctx.stroke();
+
+      ctx.fillStyle = "#ffffff";
+      ctx.font = "bold 34px 'Plus Jakarta Sans', system-ui, sans-serif";
+      ctx.textAlign = "center";
+      ctx.textBaseline = "middle";
+      ctx.fillText("KP", 98, 88);
+
+      // Neon lime pulse dot next to monogram
+      ctx.fillStyle = "#ccff00";
+      ctx.beginPath();
+      ctx.arc(120, 62, 7, 0, Math.PI * 2);
+      ctx.fill();
+
+      // Brand Title
+      ctx.textAlign = "left";
+      ctx.textBaseline = "top";
+      ctx.fillStyle = "#ffffff";
+      ctx.font = "bold 26px 'Plus Jakarta Sans', system-ui, sans-serif";
+      ctx.fillText("Kamil Pitner", 154, 60);
+
+      ctx.fillStyle = "#a1a1aa";
+      ctx.font = "500 16px 'Plus Jakarta Sans', system-ui, sans-serif";
+      ctx.fillText("Karta Opinii NFC", 154, 96);
+
+      // Top Right: NFC Wave Icon
+      ctx.strokeStyle = "#ccff00";
+      ctx.lineWidth = 4;
+      ctx.beginPath();
+      ctx.arc(930, 88, 12, -Math.PI / 3, Math.PI / 3);
+      ctx.stroke();
+      ctx.beginPath();
+      ctx.arc(930, 88, 22, -Math.PI / 3, Math.PI / 3);
+      ctx.stroke();
+      ctx.beginPath();
+      ctx.arc(930, 88, 32, -Math.PI / 3, Math.PI / 3);
+      ctx.stroke();
+
+      // Center: Google 5 Stars Box
+      ctx.fillStyle = "#121215";
+      ctx.beginPath();
+      ctx.roundRect(60, 180, 904, 280, 24);
+      ctx.fill();
+      ctx.strokeStyle = "rgba(204, 255, 0, 0.25)";
+      ctx.lineWidth = 2;
+      ctx.stroke();
+
+      // Google Logo Representation
+      ctx.fillStyle = "#ffffff";
+      ctx.font = "800 32px 'Plus Jakarta Sans', system-ui, sans-serif";
+      ctx.textAlign = "center";
+      ctx.fillText("Oceń nas", 512, 230);
+
+      // 5 Gold & Neon Stars
+      const starSpacing = 72;
+      const startX = 512 - (2 * starSpacing);
+      for (let i = 0; i < 5; i++) {
+        drawStar(ctx, startX + i * starSpacing, 310, 26, 12, 5, "#ccff00");
+      }
+
+      ctx.fillStyle = "#a1a1aa";
+      ctx.font = "600 18px 'Plus Jakarta Sans', system-ui, sans-serif";
+      ctx.fillText("Zbliż telefon do karty • 5 sekund do recenzji", 512, 395);
+
+      // Bottom Bar Details
+      ctx.textAlign = "left";
+      ctx.font = "bold 15px 'Plus Jakarta Sans', system-ui, sans-serif";
+      ctx.fillStyle = "#71717a";
+      ctx.fillText("KARTA OPINII • CHIP ZBLIŻENIOWY", 60, 560);
+
+      ctx.textAlign = "right";
+      ctx.fillStyle = "#ccff00";
+      ctx.font = "bold 16px 'Plus Jakarta Sans', system-ui, sans-serif";
+      ctx.fillText("BEZ APLIKACJI • 100% AUTOMATYCZNIE", 964, 560);
+
+      const texture = new THREE.CanvasTexture(texCanvas);
+      texture.colorSpace = THREE.SRGBColorSpace;
+      return texture;
+    }
+
+    function createBackTexture(): THREE.CanvasTexture {
+      const texCanvas = document.createElement("canvas");
+      texCanvas.width = 1024;
+      texCanvas.height = 645;
+      const ctx = texCanvas.getContext("2d")!;
+
+      // Deep Matte Dark Background
+      ctx.fillStyle = "#09090b";
+      ctx.fillRect(0, 0, 1024, 645);
+
+      // Grid watermark
+      ctx.strokeStyle = "rgba(255, 255, 255, 0.03)";
+      ctx.lineWidth = 1;
+      for (let x = -645; x < 1024; x += 32) {
+        ctx.beginPath();
+        ctx.moveTo(x, 0);
+        ctx.lineTo(x + 645, 645);
+        ctx.stroke();
+      }
+
+      // Stylized QR Code Box
+      const qrSize = 300;
+      const qrX = 512 - qrSize / 2;
+      const qrY = 130;
+
+      ctx.fillStyle = "#ffffff";
+      ctx.beginPath();
+      ctx.roundRect(qrX - 16, qrY - 16, qrSize + 32, qrSize + 32, 20);
+      ctx.fill();
+
+      // Simulated QR Code Matrix
+      ctx.fillStyle = "#09090b";
+      const matrixSize = 21;
+      const cellSize = qrSize / matrixSize;
+
+      // Draw QR Position Squares
+      function drawQrPosition(ox: number, oy: number) {
+        ctx.fillStyle = "#09090b";
+        ctx.fillRect(ox, oy, cellSize * 7, cellSize * 7);
+        ctx.fillStyle = "#ffffff";
+        ctx.fillRect(ox + cellSize, oy + cellSize, cellSize * 5, cellSize * 5);
+        ctx.fillStyle = "#09090b";
+        ctx.fillRect(ox + cellSize * 2, oy + cellSize * 2, cellSize * 3, cellSize * 3);
+      }
+
+      drawQrPosition(qrX, qrY);
+      drawQrPosition(qrX + qrSize - cellSize * 7, qrY);
+      drawQrPosition(qrX, qrY + qrSize - cellSize * 7);
+
+      // Seed pseudo-random QR modules
+      ctx.fillStyle = "#09090b";
+      let seed = 42;
+      for (let r = 0; r < matrixSize; r++) {
+        for (let c = 0; c < matrixSize; c++) {
+          if ((r < 8 && c < 8) || (r < 8 && c > matrixSize - 9) || (r > matrixSize - 9 && c < 8)) {
+            continue;
+          }
+          seed = (seed * 9301 + 49297) % 233280;
+          if (seed / 233280 > 0.48) {
+            ctx.fillRect(qrX + c * cellSize, qrY + r * cellSize, cellSize, cellSize);
+          }
+        }
+      }
+
+      // Center Logo inside QR
+      ctx.fillStyle = "#ccff00";
+      ctx.beginPath();
+      ctx.roundRect(512 - 28, qrY + qrSize / 2 - 28, 56, 56, 12);
+      ctx.fill();
+      ctx.fillStyle = "#09090b";
+      ctx.font = "bold 22px 'Plus Jakarta Sans', system-ui, sans-serif";
+      ctx.textAlign = "center";
+      ctx.textBaseline = "middle";
+      ctx.fillText("KP", 512, qrY + qrSize / 2);
+
+      // Back instruction text
+      ctx.fillStyle = "#ffffff";
+      ctx.font = "bold 26px 'Plus Jakarta Sans', system-ui, sans-serif";
+      ctx.fillText("Zeskanuj i dodaj opinię", 512, 510);
+
+      ctx.fillStyle = "#a1a1aa";
+      ctx.font = "500 17px 'Plus Jakarta Sans', system-ui, sans-serif";
+      ctx.fillText("Działa ze wszystkimi urządzeniami iPhone i Android bez instalacji", 512, 555);
+
+      const texture = new THREE.CanvasTexture(texCanvas);
+      texture.colorSpace = THREE.SRGBColorSpace;
+      return texture;
+    }
+
+    function drawStar(ctx: CanvasRenderingContext2D, cx: number, cy: number, outerRadius: number, innerRadius: number, points: number, color: string) {
+      let rot = (Math.PI / 2) * 3;
+      let x = cx;
+      let y = cy;
+      const step = Math.PI / points;
+
+      ctx.beginPath();
+      ctx.moveTo(cx, cy - outerRadius);
+      for (let i = 0; i < points; i++) {
+        x = cx + Math.cos(rot) * outerRadius;
+        y = cy + Math.sin(rot) * outerRadius;
+        ctx.lineTo(x, y);
+        rot += step;
+
+        x = cx + Math.cos(rot) * innerRadius;
+        y = cy + Math.sin(rot) * innerRadius;
+        ctx.lineTo(x, y);
+        rot += step;
+      }
+      ctx.lineTo(cx, cy - outerRadius);
+      ctx.closePath();
+      ctx.fillStyle = color;
+      ctx.fill();
+    }
+
+    // 2. Set Up Three.js Scene, Camera, Renderer
+    const scene = new THREE.Scene();
+
+    const camera = new THREE.PerspectiveCamera(40, canvas.clientWidth / canvas.clientHeight, 0.1, 100);
+    camera.position.set(0, 0, 4.4);
+
+    const renderer = new THREE.WebGLRenderer({
+      canvas,
+      antialias: true,
+      alpha: true,
+      powerPreference: "high-performance",
+    });
+
+    const dpr = Math.min(window.devicePixelRatio || 1, 2);
+    renderer.setPixelRatio(dpr);
+    renderer.setSize(canvas.clientWidth, canvas.clientHeight, false);
+    renderer.toneMapping = THREE.ACESFilmicToneMapping;
+    renderer.toneMappingExposure = 1.1;
+
+    // Dynamic Camera Distance Calculation to ensure card has balanced margins & never clipped
+    function updateCameraFit() {
+      if (!canvas) return;
+      const width = canvas.clientWidth;
+      const height = canvas.clientHeight;
+      if (width === 0 || height === 0) return;
+
+      const aspect = width / height;
+      camera.aspect = aspect;
+
+      const vFovRad = (camera.fov * Math.PI) / 180;
+      const targetWidth = 4.3; // Balanced framing with pleasant breathing room
+      const targetHeight = 2.7;
+
+      const distH = (targetWidth / 2) / (Math.tan(vFovRad / 2) * aspect);
+      const distV = (targetHeight / 2) / Math.tan(vFovRad / 2);
+
+      camera.position.z = Math.max(distH, distV, 4.4);
+      camera.updateProjectionMatrix();
+      renderer.setSize(width, height, false);
+    }
+
+    // 3. Lighting Rig - Soft, neutral, even studio illumination (no harsh glints or colored spot lights)
+    const ambientLight = new THREE.AmbientLight(0xffffff, 1.4);
+    scene.add(ambientLight);
+
+    const keyLight = new THREE.DirectionalLight(0xffffff, 1.2);
+    keyLight.position.set(3, 4, 5);
+    scene.add(keyLight);
+
+    const fillLight = new THREE.DirectionalLight(0xffffff, 0.7);
+    fillLight.position.set(-3, 2, -4);
+    scene.add(fillLight);
+
+    // 4. Construct Card Geometry (Rounded Extruded Box)
+    const cardWidth = 3.35;
+    const cardHeight = cardWidth / 1.586;
+    const radius = 0.16;
+    const thickness = 0.055;
+
+    const shape = new THREE.Shape();
+    const x = -cardWidth / 2;
+    const y = -cardHeight / 2;
+    const w = cardWidth;
+    const h = cardHeight;
+
+    shape.moveTo(x + radius, y);
+    shape.lineTo(x + w - radius, y);
+    shape.quadraticCurveTo(x + w, y, x + w, y + radius);
+    shape.lineTo(x + w, y + h - radius);
+    shape.quadraticCurveTo(x + w, y + h, x + w - radius, y + h);
+    shape.lineTo(x + radius, y + h);
+    shape.quadraticCurveTo(x, y + h, x, y + h - radius);
+    shape.lineTo(x, y + radius);
+    shape.quadraticCurveTo(x, y, x + radius, y);
+
+    const extrudeSettings = {
+      depth: thickness,
+      bevelEnabled: true,
+      bevelSegments: 5,
+      steps: 1,
+      bevelSize: 0.015,
+      bevelThickness: 0.015,
+    };
+
+    const geometry = new THREE.ExtrudeGeometry(shape, extrudeSettings);
+    geometry.center();
+
+    // Textures & Materials
+    const frontTex = createFrontTexture();
+    const backTex = createBackTexture();
+
+    const maxAnisotropy = renderer.capabilities.getMaxAnisotropy();
+    frontTex.anisotropy = maxAnisotropy;
+    backTex.anisotropy = maxAnisotropy;
+
+    // Front material - Clean matte finish without glossy glare
+    const frontMaterial = new THREE.MeshPhysicalMaterial({
+      map: frontTex,
+      roughness: 0.35,
+      metalness: 0.05,
+      clearcoat: 0.0,
+      clearcoatRoughness: 0.0,
+      reflectivity: 0.2,
+    });
+
+    // Back material
+    const backMaterial = new THREE.MeshPhysicalMaterial({
+      map: backTex,
+      roughness: 0.35,
+      metalness: 0.05,
+      clearcoat: 0.0,
+      clearcoatRoughness: 0.0,
+      reflectivity: 0.2,
+    });
+
+    // Dark edges material for core plastic
+    const edgeMaterial = new THREE.MeshStandardMaterial({
+      color: 0x18181b,
+      roughness: 0.3,
+      metalness: 0.2,
+    });
+
+    // We create a group with two thin rounded decal meshes to guarantee razor-sharp edges and eliminate any protruding corners
+    const cardGroup = new THREE.Group();
+
+    // Plastic Core Mesh
+    const coreMesh = new THREE.Mesh(geometry, edgeMaterial);
+    cardGroup.add(coreMesh);
+
+    // Front Decal Geometry (rounded corners, matching exact card boundary)
+    const frontDecalGeo = new THREE.ShapeGeometry(shape, 32);
+    frontDecalGeo.center();
+    frontDecalGeo.computeBoundingBox();
+    const fBox = frontDecalGeo.boundingBox!;
+    const fSpanX = fBox.max.x - fBox.min.x;
+    const fSpanY = fBox.max.y - fBox.min.y;
+    const fPos = frontDecalGeo.attributes.position;
+    const fUvs = frontDecalGeo.attributes.uv;
+    for (let i = 0; i < fPos.count; i++) {
+      const px = fPos.getX(i);
+      const py = fPos.getY(i);
+      const u = (px - fBox.min.x) / fSpanX;
+      const v = (py - fBox.min.y) / fSpanY;
+      fUvs.setXY(i, u, v);
+    }
+    fUvs.needsUpdate = true;
+
+    // Back Decal Geometry (rounded corners, matching exact card boundary)
+    const backDecalGeo = new THREE.ShapeGeometry(shape, 32);
+    backDecalGeo.center();
+    backDecalGeo.computeBoundingBox();
+    const bBox = backDecalGeo.boundingBox!;
+    const bSpanX = bBox.max.x - bBox.min.x;
+    const bSpanY = bBox.max.y - bBox.min.y;
+    const bPos = backDecalGeo.attributes.position;
+    const bUvs = backDecalGeo.attributes.uv;
+    for (let i = 0; i < bPos.count; i++) {
+      const px = bPos.getX(i);
+      const py = bPos.getY(i);
+      // Map left-to-right naturally when backPlane has rotation.y = Math.PI
+      const u = (px - bBox.min.x) / bSpanX;
+      const v = (py - bBox.min.y) / bSpanY;
+      bUvs.setXY(i, u, v);
+    }
+    bUvs.needsUpdate = true;
+
+    // Front Decal Plane
+    const frontPlane = new THREE.Mesh(frontDecalGeo, frontMaterial);
+    frontPlane.position.z = thickness / 2 + 0.016;
+    cardGroup.add(frontPlane);
+
+    // Back Decal Plane
+    const backPlane = new THREE.Mesh(backDecalGeo, backMaterial);
+    backPlane.position.z = -thickness / 2 - 0.016;
+    backPlane.rotation.y = Math.PI;
+    cardGroup.add(backPlane);
+
+    scene.add(cardGroup);
+
+    // Initial slight angle for beauty
+    cardGroup.rotation.y = -0.35;
+    cardGroup.rotation.x = 0.18;
+
+    // Immediately calculate camera framing based on container size
+    updateCameraFit();
+
+    // Hide loader
+    if (loader) {
+      loader.classList.add("opacity-0", "pointer-events-none");
+      setTimeout(() => loader.remove(), 500);
+    }
+
+    // 5. Interaction State (Touch & Mouse Drag / Inertia)
+    let isDragging = false;
+    let previousPointerX = 0;
+    let previousPointerY = 0;
+    let targetRotationX = cardGroup.rotation.x;
+    let targetRotationY = cardGroup.rotation.y;
+    let pointerVelocityX = 0;
+    let pointerVelocityY = 0;
+    let isFlipped = false;
+    let hasInteracted = false;
+
+    // Pointer events on canvas
+    canvas.addEventListener("pointerdown", (e) => {
+      isDragging = true;
+      previousPointerX = e.clientX;
+      previousPointerY = e.clientY;
+      pointerVelocityX = 0;
+      pointerVelocityY = 0;
+      canvas.setPointerCapture(e.pointerId);
+
+      if (hint && !hasInteracted) {
+        hint.classList.add("opacity-0");
+        hasInteracted = true;
+      }
+    });
+
+    canvas.addEventListener("pointermove", (e) => {
+      if (!isDragging) {
+        // Subtle hover tilt when not dragging
+        const rect = canvas.getBoundingClientRect();
+        const mouseX = ((e.clientX - rect.left) / rect.width) * 2 - 1;
+        const mouseY = -(((e.clientY - rect.top) / rect.height) * 2 - 1);
+
+        if (!prefersReducedMotion) {
+          targetRotationY += (mouseX * 0.01);
+          targetRotationX += (-mouseY * 0.01);
+        }
+        return;
+      }
+
+      const deltaX = e.clientX - previousPointerX;
+      const deltaY = e.clientY - previousPointerY;
+
+      pointerVelocityX = deltaX * 0.007;
+      pointerVelocityY = deltaY * 0.007;
+
+      targetRotationY += pointerVelocityX;
+      targetRotationX += pointerVelocityY;
+
+      // Limit pitch to prevent upside-down flip confusion
+      targetRotationX = Math.max(-Math.PI / 2.2, Math.min(Math.PI / 2.2, targetRotationX));
+
+      previousPointerX = e.clientX;
+      previousPointerY = e.clientY;
+    });
+
+    window.addEventListener("pointerup", (e) => {
+      if (isDragging) {
+        isDragging = false;
+        try {
+          canvas.releasePointerCapture(e.pointerId);
+        } catch (_) {}
+      }
+    });
+
+    // Flip button handler
+    if (flipBtn) {
+      flipBtn.addEventListener("click", () => {
+        isFlipped = !isFlipped;
+        targetRotationY = isFlipped ? Math.PI : 0;
+        targetRotationX = 0.12;
+
+        if (hint && !hasInteracted) {
+          hint.classList.add("opacity-0");
+          hasInteracted = true;
+        }
+      });
+    }
+
+    // Reset button handler
+    if (resetBtn) {
+      resetBtn.addEventListener("click", () => {
+        isFlipped = false;
+        targetRotationY = -0.35;
+        targetRotationX = 0.18;
+      });
+    }
+
+    // 6. Responsive Resize & Visibility Observer
+    let isVisible = true;
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach((entry) => {
+        isVisible = entry.isIntersecting;
+      });
+    }, { threshold: 0.05 });
+
+    observer.observe(canvas);
+
+    function onResize() {
+      updateCameraFit();
+    }
+
+    window.addEventListener("resize", onResize);
+
+    // 7. Render Loop (60fps with Framerate-Independent Lerp)
+    const startTime = performance.now();
+    let animationFrameId: number;
+
+    function animate(currentTime: number = performance.now()) {
+      animationFrameId = requestAnimationFrame(animate);
+
+      if (!isVisible) return; // Pause GPU rendering when off-screen
+
+      const time = (currentTime - startTime) * 0.001;
+
+      if (!isDragging) {
+        // Natural idle floating animation (unless prefers-reduced-motion)
+        if (!prefersReducedMotion) {
+          cardGroup.position.y = Math.sin(time * 1.8) * 0.06;
+          // Very gentle continuous idle rotation
+          targetRotationY += 0.003;
+        }
+
+        // Apply friction to pointer velocities
+        pointerVelocityX *= 0.92;
+        pointerVelocityY *= 0.92;
+        targetRotationY += pointerVelocityX;
+        targetRotationX += pointerVelocityY;
+      }
+
+      // Smooth dampening towards target rotation
+      cardGroup.rotation.y += (targetRotationY - cardGroup.rotation.y) * 0.08;
+      cardGroup.rotation.x += (targetRotationX - cardGroup.rotation.x) * 0.08;
+
+      renderer.render(scene, camera);
+    }
+
+    animate();
+
+    // Cleanup on window unload
+    window.addEventListener("beforeunload", () => {
+      cancelAnimationFrame(animationFrameId);
+      observer.disconnect();
+      window.removeEventListener("resize", onResize);
+      geometry.dispose();
+      frontDecalGeo.dispose();
+      backDecalGeo.dispose();
+      frontTex.dispose();
+      backTex.dispose();
+      frontMaterial.dispose();
+      backMaterial.dispose();
+      edgeMaterial.dispose();
+      renderer.dispose();
+    });
+  }
+
+  // Initialize lazy loader once DOM is ready
+  if (document.readyState === "loading") {
+    document.addEventListener("DOMContentLoaded", setupLazyNfc3D);
+  } else {
+    setupLazyNfc3D();
+  }
+</script>

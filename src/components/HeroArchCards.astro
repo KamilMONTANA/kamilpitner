@@ -1,0 +1,504 @@
+---
+/**
+ * HeroArchCards.astro
+ * 4 Cathedral Arch Cards inspired by the reference layout:
+ * - Rounded-t-full vaulted dome arch tops
+ * - Pastel tinted backgrounds matching the 4 core services
+ * - 3D circular display pedestals with floating, tactile brand emblems
+ * - 100% official vector icons from simple-icons (no custom-drawn shapes, no Astro)
+ * - Cohesive Plus Jakarta Sans typography
+ * - Interactive mouse parallax & 60fps smooth idle levitation
+ */
+const cards = [
+  {
+    id: "strony-www",
+    href: "#strony-www",
+    title: "Strony WWW",
+    subtitle: "Szybkie & Skuteczne",
+    bgClass: "bg-[#fae8e8] border-[#f5d0d4]",
+    pedestalHex: "#ebd0d4",
+    cardIndex: 0,
+    iconData: {
+      type: "single",
+      viewBox: { x: 0, y: 0, width: 24, height: 24 },
+      // Clean universal browser window vector (no Cloudflare, no Astro, no tech stack)
+      path: "M3 3a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h18a2 2 0 0 0 2-2V5a2 2 0 0 0-2-2H3zm0 2h18v3H3V5zm0 5h18v9H3v-9zm2-3.5a.75.75 0 1 1 0-1.5.75.75 0 0 1 0 1.5zm2.5 0a.75.75 0 1 1 0-1.5.75.75 0 0 1 0 1.5zm2.5 0a.75.75 0 1 1 0-1.5.75.75 0 0 1 0 1.5zM5 12h6v5H5v-5zm8 0h6v2h-6v-2zm0 3h6v2h-6v-2z",
+      brandColor: "#2563EB",
+      isDark: false,
+    }
+  },
+  {
+    id: "google-ads",
+    href: "#google-ads",
+    title: "Google Ads",
+    subtitle: "Nowi Klienci od Zaraz",
+    bgClass: "bg-[#e0f2fe] border-[#cbe4f9]",
+    pedestalHex: "#cde4f7",
+    cardIndex: 1,
+    iconData: {
+      type: "multi",
+      viewBox: { x: 0, y: -13, width: 256, height: 256 },
+      // Authentic official Google Ads multi-colored vector logo
+      layers: [
+        {
+          path: "M5.888,166.405103 L90.88,20.9 C101.676138,27.2558621 156.115862,57.3844138 164.908138,63.1135172 L79.9161379,208.627448 C70.6206897,220.906621 -5.888,185.040138 5.888,166.396276 L5.888,166.405103 Z",
+          color: "#FBBC04"
+        },
+        {
+          path: "M250.084224,166.401789 L165.092224,20.9055131 C153.210293,1.13172 127.619121,-6.05393517 106.600638,5.62496138 C85.582155,17.3038579 79.182155,42.4624786 91.0640861,63.1190303 L176.056086,208.632961 C187.938017,228.397927 213.52919,235.583582 234.547672,223.904686 C254.648086,212.225789 261.966155,186.175582 250.084224,166.419444 L250.084224,166.401789 Z",
+          color: "#4285F4"
+        },
+        {
+          type: "ellipse",
+          cx: 42.6637241,
+          cy: 187.924414,
+          rx: 42.6637241,
+          ry: 41.6044138,
+          color: "#34A853"
+        }
+      ],
+      isDark: false,
+    }
+  },
+  {
+    id: "google-moja-firma",
+    href: "#google-moja-firma",
+    title: "Google Moja Firma",
+    subtitle: "Bądź nr 1 w Swoim Mieście",
+    bgClass: "bg-[#eff5ec] border-[#dbe8d6]",
+    pedestalHex: "#d5e6d4",
+    cardIndex: 2,
+    iconData: {
+      type: "single",
+      viewBox: { x: 0, y: 0, width: 24, height: 24 },
+      // Official Google My Business (Google Moja Firma) Storefront Awning with Google G
+      path: "M3.273 1.636c-.736 0-1.363.492-1.568 1.16L0 9.272c0 1.664 1.336 3 3 3a3 3 0 0 0 3-3c0 1.664 1.336 3 3 3a3 3 0 0 0 3-3c0 1.65 1.35 3 3 3 1.664 0 3-1.336 3-3 0 1.664 1.336 3 3 3s3-1.336 3-3l-1.705-6.476a1.646 1.646 0 0 0-1.568-1.16zm8.729 9.326c-.604 1.063-1.703 1.81-3.002 1.81-1.304 0-2.398-.747-3-1.806-.604 1.06-1.702 1.806-3 1.806-.484 0-.944-.1-1.363-.277v8.232c0 .9.736 1.637 1.636 1.637h17.454c.9 0 1.636-.737 1.636-1.637v-8.232a3.48 3.48 0 0 1-1.363.277c-1.304 0-2.398-.746-3-1.804-.602 1.058-1.696 1.804-3 1.804-1.299 0-2.394-.75-2.998-1.81zm5.725 3.765c.808 0 1.488.298 2.007.782l-.859.859a1.623 1.623 0 0 0-1.148-.447c-.98 0-1.772.827-1.772 1.806 0 .98.792 1.807 1.772 1.807.882 0 1.485-.501 1.615-1.191h-1.615v-1.16h2.826c.035.196.054.4.054.613 0 1.714-1.147 2.931-2.88 2.931a3 3 0 0 1 0-6z",
+      brandColor: "#1A73E8",
+      isDark: false,
+    }
+  },
+  {
+    id: "opinie",
+    href: "#opinie-nfc",
+    title: "Opinie",
+    subtitle: "Zbieraj Oceny w 5 Sekund",
+    bgClass: "bg-[#fef4db] border-[#fde6b3]",
+    pedestalHex: "#f5e3be",
+    cardIndex: 3,
+    iconData: {
+      type: "single",
+      viewBox: { x: 0, y: 0, width: 24, height: 24 },
+      // Classic 5-star customer review rating star
+      path: "M12 1.75l2.924 5.925 6.538.95-4.731 4.611 1.117 6.514L12 16.674l-5.848 3.076 1.117-6.514-4.731-4.611 6.538-.95L12 1.75z",
+      brandColor: "#F59E0B",
+      isDark: false,
+    }
+  }
+];
+---
+
+<div class="w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mt-12 sm:mt-16">
+  <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5 lg:gap-6 items-end">
+    {cards.map((card) => (
+      <a
+        href={card.href}
+        class={`arch-card group relative flex flex-col justify-between overflow-hidden rounded-t-full rounded-b-none ${card.bgClass} border border-b-0 px-5 sm:px-6 pt-10 sm:pt-12 pb-0 min-h-[420px] sm:min-h-[460px] lg:min-h-[490px] transition-colors duration-300 select-none block cursor-pointer`}
+        data-card-index={card.cardIndex}
+        data-pedestal-hex={card.pedestalHex}
+        data-icon-json={JSON.stringify(card.iconData)}
+      >
+        <!-- Top Typography: Title & Subtitle inside Arch Dome (lifts on hover) -->
+        <div class="text-center space-y-1 relative z-10 pt-2 transition-transform duration-500 ease-[cubic-bezier(0.16,1,0.3,1)] group-hover:-translate-y-1.5">
+          <h3 class="text-lg sm:text-xl font-extrabold tracking-tight text-zinc-950 group-hover:text-black transition-colors">
+            {card.title}
+          </h3>
+          <p class="text-xs sm:text-sm font-medium text-zinc-600">
+            {card.subtitle}
+          </p>
+        </div>
+
+        <!-- 3D Pedestal & Logo Stage (lifts on hover) -->
+        <div class="relative w-full h-64 sm:h-72 lg:h-76 flex items-center justify-center mt-2 transition-transform duration-500 ease-[cubic-bezier(0.16,1,0.3,1)] group-hover:-translate-y-2">
+          <canvas
+            class="arch-canvas w-full h-full block pointer-events-none"
+          ></canvas>
+        </div>
+      </a>
+    ))}
+  </div>
+</div>
+
+<script>
+  import * as THREE from "three";
+
+  function initArchScenes() {
+    const cardElements = document.querySelectorAll(".arch-card");
+    if (!cardElements.length) return;
+
+    const prefersReducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+
+    // Helper: Create soft radial contact shadow texture
+    function createShadowTexture() {
+      const canvas = document.createElement("canvas");
+      canvas.width = 256;
+      canvas.height = 256;
+      const ctx = canvas.getContext("2d");
+      if (!ctx) return null;
+
+      const grad = ctx.createRadialGradient(128, 128, 0, 128, 128, 120);
+      grad.addColorStop(0, "rgba(0, 0, 0, 0.38)");
+      grad.addColorStop(0.4, "rgba(0, 0, 0, 0.16)");
+      grad.addColorStop(0.8, "rgba(0, 0, 0, 0.04)");
+      grad.addColorStop(1, "rgba(0, 0, 0, 0)");
+
+      ctx.fillStyle = grad;
+      ctx.beginPath();
+      ctx.arc(128, 128, 128, 0, Math.PI * 2);
+      ctx.fill();
+
+      const tex = new THREE.CanvasTexture(canvas);
+      tex.needsUpdate = true;
+      return tex;
+    }
+
+    const shadowTexture = createShadowTexture();
+
+    // Helper: Draw crisp official vector logos directly with pixel-perfect scale and positioning
+    function createLogoTexture(config: any) {
+      const canvas = document.createElement("canvas");
+      canvas.width = 1024;
+      canvas.height = 1024;
+      const ctx = canvas.getContext("2d");
+      if (!ctx) return null;
+
+      const isDark = !!config.isDark;
+
+      // 1. Badge Face Background (Clean porcelain or sleek obsidian)
+      if (isDark) {
+        const bgGrad = ctx.createLinearGradient(0, 0, 1024, 1024);
+        bgGrad.addColorStop(0, "#14151d");
+        bgGrad.addColorStop(1, "#0a0a0e");
+        ctx.fillStyle = bgGrad;
+        ctx.fillRect(0, 0, 1024, 1024);
+
+        // Soft inner rim aligned with squircle
+        ctx.strokeStyle = "rgba(255, 255, 255, 0.12)";
+        ctx.lineWidth = 16;
+        ctx.beginPath();
+        ctx.roundRect(48, 48, 928, 928, 200);
+        ctx.stroke();
+      } else {
+        const bgGrad = ctx.createLinearGradient(0, 0, 1024, 1024);
+        bgGrad.addColorStop(0, "#ffffff");
+        bgGrad.addColorStop(0.6, "#fafafa");
+        bgGrad.addColorStop(1, "#f4f4f5");
+        ctx.fillStyle = bgGrad;
+        ctx.fillRect(0, 0, 1024, 1024);
+
+        // Soft inner rim aligned with squircle
+        ctx.strokeStyle = "rgba(0, 0, 0, 0.05)";
+        ctx.lineWidth = 16;
+        ctx.beginPath();
+        ctx.roundRect(48, 48, 928, 928, 200);
+        ctx.stroke();
+      }
+
+      // 2. Render Icon based on type (single path or multi-colored layers)
+      const targetSize = 560; // target pixel size inside 1024x1024 badge
+      const vb = config.viewBox || { x: 0, y: 0, width: 24, height: 24 };
+      const scale = targetSize / Math.max(vb.width, vb.height);
+      const scaledW = vb.width * scale;
+      const scaledH = vb.height * scale;
+      const offsetX = (1024 - scaledW) / 2 - vb.x * scale;
+      const offsetY = (1024 - scaledH) / 2 - vb.y * scale;
+
+      ctx.save();
+      ctx.translate(offsetX, offsetY);
+      ctx.scale(scale, scale);
+
+      if (config.type === "multi" && Array.isArray(config.layers)) {
+        config.layers.forEach((layer: any) => {
+          if (layer.path) {
+            const p = new Path2D(layer.path);
+            ctx.fillStyle = layer.color;
+            ctx.fill(p);
+          } else if (layer.type === "ellipse") {
+            ctx.fillStyle = layer.color;
+            ctx.beginPath();
+            ctx.ellipse(layer.cx, layer.cy, layer.rx, layer.ry, 0, 0, Math.PI * 2);
+            ctx.fill();
+          }
+        });
+      } else if (config.path) {
+        const p = new Path2D(config.path);
+        ctx.fillStyle = config.brandColor || "#18181b";
+        ctx.fill(p);
+      }
+
+      ctx.restore();
+
+      const texture = new THREE.CanvasTexture(canvas);
+      texture.anisotropy = 16;
+      texture.needsUpdate = true;
+      return texture;
+    }
+
+    // Helper: Create Squircle shape
+    function createSquircleShape(size: number, radius: number) {
+      const shape = new THREE.Shape();
+      const x = -size / 2;
+      const y = -size / 2;
+      const w = size;
+      const h = size;
+      const r = radius;
+
+      shape.moveTo(x + r, y);
+      shape.lineTo(x + w - r, y);
+      shape.quadraticCurveTo(x + w, y, x + w, y + r);
+      shape.lineTo(x + w, y + h - r);
+      shape.quadraticCurveTo(x + w, y + h, x + w - r, y + h);
+      shape.lineTo(x + r, y + h);
+      shape.quadraticCurveTo(x, y + h, x, y + h - r);
+      shape.lineTo(x, y + r);
+      shape.quadraticCurveTo(x, y, x + r, y);
+
+      return shape;
+    }
+
+    const instances: Array<{
+      renderer: THREE.WebGLRenderer;
+      scene: THREE.Scene;
+      camera: THREE.PerspectiveCamera;
+      badgeGroup: THREE.Group;
+      pedestalMesh: THREE.Mesh;
+      pedestalShadow: THREE.Mesh;
+      badgeShadow: THREE.Mesh;
+      targetRotX: number;
+      targetRotY: number;
+      cardIndex: number;
+    }> = [];
+
+    // Shared geometry for the squircle badge
+    const squircleShape = createSquircleShape(1.68, 0.38);
+    const squircleGeom = new THREE.ExtrudeGeometry(squircleShape, {
+      depth: 0.14,
+      bevelEnabled: true,
+      bevelThickness: 0.035,
+      bevelSize: 0.035,
+      bevelSegments: 4,
+    });
+    squircleGeom.center();
+
+    // Normalize UV coordinates on squircleGeom so the 1024x1024 texture displays crisply on the front face
+    squircleGeom.computeBoundingBox();
+    const bb = squircleGeom.boundingBox!;
+    const sizeX = bb.max.x - bb.min.x;
+    const sizeY = bb.max.y - bb.min.y;
+    const uvAttr = squircleGeom.attributes.uv;
+    for (let i = 0; i < uvAttr.count; i++) {
+      const u = (squircleGeom.attributes.position.getX(i) - bb.min.x) / sizeX;
+      const v = (squircleGeom.attributes.position.getY(i) - bb.min.y) / sizeY;
+      uvAttr.setXY(i, u, v);
+    }
+    uvAttr.needsUpdate = true;
+
+    // Shared geometry for pedestal and shadows
+    const pedestalGeom = new THREE.CylinderGeometry(1.38, 1.48, 0.24, 64);
+    const shadowGeom = new THREE.PlaneGeometry(3.4, 3.4);
+    const badgeShadowGeom = new THREE.PlaneGeometry(1.6, 0.75);
+
+    cardElements.forEach((cardEl, idx) => {
+      const canvas = cardEl.querySelector(".arch-canvas") as HTMLCanvasElement;
+      if (!canvas) return;
+
+      const iconJson = JSON.parse(cardEl.getAttribute("data-icon-json") || "{}");
+      const pedestalHex = cardEl.getAttribute("data-pedestal-hex") || "#e5e7eb";
+
+      // Three.js Scene Setup
+      const scene = new THREE.Scene();
+      const camera = new THREE.PerspectiveCamera(36, canvas.clientWidth / canvas.clientHeight, 0.1, 100);
+      camera.position.set(0, 1.05, 4.7);
+      camera.lookAt(0, 0.3, 0);
+
+      const renderer = new THREE.WebGLRenderer({
+        canvas,
+        alpha: true,
+        antialias: true,
+        powerPreference: "high-performance",
+      });
+      renderer.setSize(canvas.clientWidth, canvas.clientHeight, false);
+      renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+
+      // Lighting
+      const ambientLight = new THREE.AmbientLight(0xffffff, 1.5);
+      scene.add(ambientLight);
+
+      const keyLight = new THREE.DirectionalLight(0xffffff, 2.2);
+      keyLight.position.set(-2.5, 5, 4.5);
+      scene.add(keyLight);
+
+      const fillLight = new THREE.DirectionalLight(0xfff7ed, 1.0);
+      fillLight.position.set(3, 2, 2.5);
+      scene.add(fillLight);
+
+      // Contact shadow beneath the pedestal
+      const pedestalShadowMat = new THREE.MeshBasicMaterial({
+        map: shadowTexture,
+        transparent: true,
+        opacity: 0.65,
+        depthWrite: false,
+      });
+      const pedestalShadow = new THREE.Mesh(shadowGeom, pedestalShadowMat);
+      pedestalShadow.rotation.x = -Math.PI / 2;
+      pedestalShadow.position.set(0, -0.48, 0);
+      scene.add(pedestalShadow);
+
+      // The 3D Pedestal Cylinder
+      const pedestalColorNum = parseInt(pedestalHex.replace("#", "0x"), 16);
+      const pedestalMat = new THREE.MeshStandardMaterial({
+        color: pedestalColorNum,
+        roughness: 0.7,
+        metalness: 0.05,
+      });
+      const pedestalMesh = new THREE.Mesh(pedestalGeom, pedestalMat);
+      pedestalMesh.position.set(0, -0.36, 0);
+      scene.add(pedestalMesh);
+
+      // The Logo Badge Group
+      const badgeGroup = new THREE.Group();
+      badgeGroup.position.set(0, 0.66, 0);
+      scene.add(badgeGroup);
+
+      // Badge Material with decal textures
+      const logoTexture = createLogoTexture(iconJson);
+      const isDark = !!iconJson.isDark;
+
+      // In Three.js ExtrudeGeometry:
+      // materialIndex 0 = Front & Back faces (receives logoTexture)
+      // materialIndex 1 = Sides & Bevel edges (clean solid metallic/matte edge)
+      const faceMaterial = new THREE.MeshStandardMaterial({
+        map: logoTexture,
+        roughness: isDark ? 0.3 : 0.2,
+        metalness: isDark ? 0.25 : 0.08,
+      });
+
+      const edgeMaterial = new THREE.MeshStandardMaterial({
+        color: isDark ? 0x18181b : 0xf4f4f5,
+        roughness: isDark ? 0.35 : 0.25,
+        metalness: isDark ? 0.45 : 0.15,
+      });
+
+      const badgeMaterials = [faceMaterial, edgeMaterial];
+      const badgeMesh = new THREE.Mesh(squircleGeom, badgeMaterials);
+      badgeGroup.add(badgeMesh);
+
+      // Small dynamic shadow cast on top of the pedestal
+      const badgeShadowMat = new THREE.MeshBasicMaterial({
+        map: shadowTexture,
+        transparent: true,
+        opacity: 0.45,
+        depthWrite: false,
+      });
+      const badgeShadow = new THREE.Mesh(badgeShadowGeom, badgeShadowMat);
+      badgeShadow.rotation.x = -Math.PI / 2;
+      badgeShadow.position.set(0, -0.23, 0);
+      scene.add(badgeShadow);
+
+      // Interaction State
+      const instance = {
+        renderer,
+        scene,
+        camera,
+        badgeGroup,
+        pedestalMesh,
+        pedestalShadow,
+        badgeShadow,
+        targetRotX: 0,
+        targetRotY: 0,
+        targetLift: 0,
+        lift: 0,
+        cardIndex: idx,
+      };
+
+      instances.push(instance);
+
+      // Mouse Parallax & Hover Elevation handlers on the Card
+      (cardEl as HTMLElement).addEventListener("pointerenter", () => {
+        instance.targetLift = 0.14;
+      });
+
+      (cardEl as HTMLElement).addEventListener("pointermove", (e: PointerEvent) => {
+        const rect = (cardEl as HTMLElement).getBoundingClientRect();
+        const normX = ((e.clientX - rect.left) / rect.width) * 2 - 1;
+        const normY = ((e.clientY - rect.top) / rect.height) * 2 - 1;
+
+        instance.targetRotY = normX * 0.38;
+        instance.targetRotX = -normY * 0.28;
+        instance.targetLift = 0.14;
+      });
+
+      (cardEl as HTMLElement).addEventListener("pointerleave", () => {
+        instance.targetRotX = 0;
+        instance.targetRotY = 0;
+        instance.targetLift = 0;
+      });
+    });
+
+    // Handle Resize
+    window.addEventListener("resize", () => {
+      instances.forEach(({ renderer, camera }) => {
+        const canvas = renderer.domElement;
+        camera.aspect = canvas.clientWidth / canvas.clientHeight;
+        camera.updateProjectionMatrix();
+        renderer.setSize(canvas.clientWidth, canvas.clientHeight, false);
+      });
+    });
+
+    // Pause RAF when Hero is out of viewport to save 100% GPU
+    let isVisible = true;
+    const heroSection = document.getElementById("hero");
+    if (heroSection) {
+      const observer = new IntersectionObserver((entries) => {
+        isVisible = entries[0].isIntersecting;
+      }, { threshold: 0.05 });
+      observer.observe(heroSection);
+    }
+
+    // Animation Loop
+    let startTime = performance.now();
+
+    function animate() {
+      requestAnimationFrame(animate);
+      if (!isVisible) return;
+
+      const elapsed = (performance.now() - startTime) * 0.001;
+
+      instances.forEach((inst) => {
+        // Idle floating bobbing + interactive hover lift
+        if (!prefersReducedMotion) {
+          inst.lift += (inst.targetLift - inst.lift) * 0.05;
+          const floatOffset = Math.sin(elapsed * 1.8 + inst.cardIndex * 1.3) * 0.045;
+          inst.badgeGroup.position.y = 0.66 + floatOffset + inst.lift;
+          inst.badgeShadow.scale.set(1 - (floatOffset + inst.lift) * 1.8, 1 - (floatOffset + inst.lift) * 1.8, 1);
+          inst.badgeShadow.material.opacity = Math.max(0.12, 0.45 - (floatOffset + inst.lift) * 1.2);
+
+          const idleRotY = Math.sin(elapsed * 1.1 + inst.cardIndex * 1.1) * 0.05;
+          inst.badgeGroup.rotation.y += (inst.targetRotY + idleRotY - inst.badgeGroup.rotation.y) * 0.045;
+          inst.badgeGroup.rotation.x += (inst.targetRotX - inst.badgeGroup.rotation.x) * 0.045;
+        } else {
+          inst.badgeGroup.position.y = 0.66;
+        }
+
+        inst.renderer.render(inst.scene, inst.camera);
+      });
+    }
+
+    animate();
+  }
+
+  if (document.readyState === "loading") {
+    document.addEventListener("DOMContentLoaded", initArchScenes);
+  } else {
+    initArchScenes();
+  }
+</script>

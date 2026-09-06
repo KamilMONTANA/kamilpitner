@@ -1,0 +1,516 @@
+---
+import { siGoogleads, siGoogle, siCloudflare, siGooglemaps, siMeta } from "simple-icons";
+
+interface Props {
+  className?: string;
+}
+
+const { className = "" } = Astro.props;
+
+// Official brand assets extracted at build-time from simple-icons library
+const brandIcons = {
+  ads: { title: "Google Ads", hex: "#" + siGoogleads.hex, path: siGoogleads.path, isDark: false },
+  google: { title: "Google", hex: "#" + siGoogle.hex, path: siGoogle.path, isDark: false },
+  cloudflare: { title: "Cloudflare", hex: "#" + siCloudflare.hex, path: siCloudflare.path, isDark: false },
+  maps: { title: "Mapy Google", hex: "#EA4335", path: siGooglemaps.path, isDark: false },
+  meta: { title: "Meta Ads", hex: "#" + siMeta.hex, path: siMeta.path, isDark: true },
+};
+---
+
+<div
+  class={`relative w-full h-[400px] sm:h-[460px] lg:h-[520px] flex items-center justify-center select-none ${className}`}
+  id="hero-3d-wrapper"
+  data-brand-icons={JSON.stringify(brandIcons)}
+>
+  <!-- Subtle soft ambient floor shadow under the 3D cluster -->
+  <div class="absolute bottom-6 left-1/2 -translate-x-1/2 w-3/4 max-w-md h-12 bg-zinc-900/10 rounded-full blur-2xl pointer-events-none"></div>
+
+  <!-- Loading placeholder -->
+  <div id="hero-3d-loader" class="absolute inset-0 flex flex-col items-center justify-center gap-3 bg-transparent text-zinc-500 z-20 transition-opacity duration-500">
+    <div class="w-7 h-7 rounded-full border-2 border-zinc-300 border-t-zinc-900 animate-spin"></div>
+    <span class="text-xs font-medium text-zinc-400">Ładowanie sceny 3D...</span>
+  </div>
+
+  <!-- WebGL Canvas directly on page background -->
+  <canvas id="hero-3d-canvas" class="w-full h-full cursor-grab active:cursor-grabbing block touch-none"></canvas>
+
+  <!-- Interactive Hint (Center bottom) -->
+  <div id="hero-3d-hint" class="absolute bottom-3 left-1/2 -translate-x-1/2 z-10 pointer-events-none px-3.5 py-1 rounded-full bg-white/80 border border-[#e7e5e4] text-zinc-500 text-[11px] font-medium tracking-wide flex items-center gap-1.5 shadow-xs backdrop-blur-md opacity-75 transition-opacity duration-300">
+    <svg xmlns="http://www.w3.org/2000/svg" class="w-3 h-3 text-zinc-700 animate-bounce" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5">
+      <path stroke-linecap="round" stroke-linejoin="round" d="M7 11.5V14m0-2.5v-6a1.5 1.5 0 113 0m-3 6a1.5 1.5 0 00-3 0v2a7.5 7.5 0 0015 0v-5a1.5 1.5 0 00-3 0m-6-3V11m0-5.5v-1a1.5 1.5 0 013 0v1m0 0V11m0-5.5a1.5 1.5 0 013 0v3m0 0V11" />
+    </svg>
+    <span>Przesuń kursor, aby poczuć głębię 3D</span>
+  </div>
+</div>
+
+<script>
+  function setupLazyHero3D() {
+    const canvas = document.getElementById("hero-3d-canvas") as HTMLCanvasElement | null;
+    if (!canvas) return;
+
+    let hasLoaded = false;
+    const lazyObserver = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          if (entry.isIntersecting && !hasLoaded) {
+            hasLoaded = true;
+            lazyObserver.disconnect();
+            import("three")
+              .then((THREE) => {
+                initHero3DScene(THREE);
+              })
+              .catch((err) => {
+                console.error("Błąd ładowania Three.js w Hero:", err);
+                const loader = document.getElementById("hero-3d-loader");
+                if (loader) loader.remove();
+              });
+          }
+        });
+      },
+      { rootMargin: "250px" }
+    );
+
+    lazyObserver.observe(canvas);
+  }
+
+  function initHero3DScene(THREE: typeof import("three")) {
+    const canvas = document.getElementById("hero-3d-canvas") as HTMLCanvasElement | null;
+    const loader = document.getElementById("hero-3d-loader");
+    const hint = document.getElementById("hero-3d-hint");
+    const wrapper = document.getElementById("hero-3d-wrapper");
+    if (!canvas) return;
+
+    const brandIconsData = wrapper ? JSON.parse(wrapper.dataset.brandIcons || "{}") : {};
+    const prefersReducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+
+    // 1. Scene, Camera, Renderer
+    const scene = new THREE.Scene();
+    const camera = new THREE.PerspectiveCamera(38, canvas.clientWidth / canvas.clientHeight, 0.1, 100);
+    camera.position.set(0, 0, 5.8);
+
+    const renderer = new THREE.WebGLRenderer({
+      canvas,
+      antialias: true,
+      alpha: true,
+      powerPreference: "high-performance",
+    });
+
+    const dpr = Math.min(window.devicePixelRatio || 1, 2);
+    renderer.setPixelRatio(dpr);
+    renderer.setSize(canvas.clientWidth, canvas.clientHeight, false);
+    renderer.toneMapping = THREE.ACESFilmicToneMapping;
+    renderer.toneMappingExposure = 1.15;
+
+    // 2. Lighting Setup - Soft, premium studio illumination
+    const ambientLight = new THREE.AmbientLight(0xffffff, 1.4);
+    scene.add(ambientLight);
+
+    const keyLight = new THREE.DirectionalLight(0xffffff, 1.2);
+    keyLight.position.set(4, 5, 5);
+    scene.add(keyLight);
+
+    const fillLight = new THREE.DirectionalLight(0xffffff, 0.6);
+    fillLight.position.set(-4, -2, 3);
+    scene.add(fillLight);
+
+    // 3. Helper: Create Squircle Token Geometry
+    function createSquircleTile(size: number, radius: number, thickness: number) {
+      const shape = new THREE.Shape();
+      const x = -size / 2;
+      const y = -size / 2;
+      const w = size;
+      const h = size;
+      const r = radius;
+
+      shape.moveTo(x + r, y);
+      shape.lineTo(x + w - r, y);
+      shape.quadraticCurveTo(x + w, y, x + w, y + r);
+      shape.lineTo(x + w, y + h - r);
+      shape.quadraticCurveTo(x + w, y + h, x + w - r, y + h);
+      shape.lineTo(x + r, y + h);
+      shape.quadraticCurveTo(x, y + h, x, y + h - r);
+      shape.lineTo(x, y + r);
+      shape.quadraticCurveTo(x, y, x + r, y);
+
+      const bevelThickness = 0.018;
+      const extrudeSettings = {
+        depth: thickness,
+        bevelEnabled: true,
+        bevelSegments: 4,
+        steps: 1,
+        bevelSize: 0.018,
+        bevelThickness: bevelThickness,
+      };
+
+      const geo = new THREE.ExtrudeGeometry(shape, extrudeSettings);
+      geo.center();
+
+      // Front decal geometry with perfectly normalized UV coordinates
+      const decalGeo = new THREE.ShapeGeometry(shape, 24);
+      decalGeo.center();
+      decalGeo.computeBoundingBox();
+      const box = decalGeo.boundingBox!;
+      const spanX = box.max.x - box.min.x;
+      const spanY = box.max.y - box.min.y;
+      const pos = decalGeo.attributes.position;
+      const uvs = decalGeo.attributes.uv;
+      for (let i = 0; i < pos.count; i++) {
+        const px = pos.getX(i);
+        const py = pos.getY(i);
+        const u = (px - box.min.x) / spanX;
+        const v = (py - box.min.y) / spanY;
+        uvs.setXY(i, u, v);
+      }
+      uvs.needsUpdate = true;
+
+      return { geo, decalGeo, thickness, bevelThickness };
+    }
+
+    // 4. Synchronous Vector Logo Drawing on 512x512 Canvas using official simple-icons path
+    function createOfficialBrandTexture(iconData: { title: string; hex: string; path: string; isDark: boolean }): import("three").CanvasTexture {
+      const texCanvas = document.createElement("canvas");
+      texCanvas.width = 512;
+      texCanvas.height = 512;
+      const ctx = texCanvas.getContext("2d")!;
+
+      const isDark = iconData.isDark;
+
+      // Background fill
+      ctx.fillStyle = isDark ? "#09090b" : "#ffffff";
+      ctx.fillRect(0, 0, 512, 512);
+
+      // Subtle border stroke
+      ctx.strokeStyle = isDark ? "#27272a" : "#e7e5e4";
+      ctx.lineWidth = 12;
+      ctx.strokeRect(6, 6, 500, 500);
+
+      // Draw official vector path from simple-icons (standard 0 0 24 24 coordinate space)
+      if (iconData.path) {
+        ctx.save();
+        const iconSize = 250;
+        const scale = iconSize / 24;
+        const ox = (512 - iconSize) / 2;
+        const oy = 90;
+
+        ctx.translate(ox, oy);
+        ctx.scale(scale, scale);
+
+        ctx.fillStyle = iconData.hex;
+        ctx.fill(new Path2D(iconData.path));
+        ctx.restore();
+      }
+
+      // Brand Title Typography
+      ctx.fillStyle = isDark ? "#ffffff" : "#18181b";
+      ctx.font = "bold 42px 'Plus Jakarta Sans', system-ui, sans-serif";
+      ctx.textAlign = "center";
+      ctx.textBaseline = "alphabetic";
+      ctx.fillText(iconData.title, 256, 435);
+
+      const texture = new THREE.CanvasTexture(texCanvas);
+      texture.colorSpace = THREE.SRGBColorSpace;
+      texture.anisotropy = renderer.capabilities.getMaxAnisotropy();
+      return texture;
+    }
+
+    // 5. Token Setup & Spatial Positioning
+    const clusterGroup = new THREE.Group();
+    scene.add(clusterGroup);
+
+    interface TokenConfig {
+      id: "astro" | "google" | "cloudflare" | "maps" | "meta";
+      size: number;
+      thickness: number;
+      radius: number;
+      edgeColor: number;
+      baseX: number;
+      baseY: number;
+      baseZ: number;
+      rotX: number;
+      rotY: number;
+      rotZ: number;
+      floatSpeed: number;
+      floatAmp: number;
+      floatPhase: number;
+      zParallax: number;
+    }
+
+    const tokensData: TokenConfig[] = [
+      {
+        id: "astro", // Center Hero Token
+        size: 1.35,
+        thickness: 0.12,
+        radius: 0.32,
+        edgeColor: 0x18181b,
+        baseX: 0.0,
+        baseY: 0.1,
+        baseZ: 0.45,
+        rotX: 0.12,
+        rotY: -0.15,
+        rotZ: -0.04,
+        floatSpeed: 1.5,
+        floatAmp: 0.07,
+        floatPhase: 0,
+        zParallax: 1.2,
+      },
+      {
+        id: "google", // Top-Left Token
+        size: 1.05,
+        thickness: 0.1,
+        radius: 0.25,
+        edgeColor: 0xe7e5e4,
+        baseX: -1.45,
+        baseY: 1.05,
+        baseZ: -0.15,
+        rotX: 0.2,
+        rotY: 0.25,
+        rotZ: 0.08,
+        floatSpeed: 1.3,
+        floatAmp: 0.05,
+        floatPhase: 1.2,
+        zParallax: 0.8,
+      },
+      {
+        id: "cloudflare", // Top-Right Token
+        size: 1.08,
+        thickness: 0.1,
+        radius: 0.25,
+        edgeColor: 0xe7e5e4,
+        baseX: 1.45,
+        baseY: 0.95,
+        baseZ: 0.1,
+        rotX: -0.12,
+        rotY: -0.22,
+        rotZ: -0.05,
+        floatSpeed: 1.4,
+        floatAmp: 0.06,
+        floatPhase: 2.1,
+        zParallax: 0.95,
+      },
+      {
+        id: "maps", // Bottom-Left Token
+        size: 1.1,
+        thickness: 0.1,
+        radius: 0.26,
+        edgeColor: 0xe7e5e4,
+        baseX: -1.35,
+        baseY: -0.95,
+        baseZ: 0.25,
+        rotX: -0.15,
+        rotY: 0.2,
+        rotZ: -0.06,
+        floatSpeed: 1.6,
+        floatAmp: 0.06,
+        floatPhase: 3.4,
+        zParallax: 1.1,
+      },
+      {
+        id: "meta", // Bottom-Right Token
+        size: 1.05,
+        thickness: 0.1,
+        radius: 0.25,
+        edgeColor: 0x18181b,
+        baseX: 1.4,
+        baseY: -0.85,
+        baseZ: -0.2,
+        rotX: 0.18,
+        rotY: -0.25,
+        rotZ: 0.07,
+        floatSpeed: 1.35,
+        floatAmp: 0.05,
+        floatPhase: 4.5,
+        zParallax: 0.75,
+      },
+    ];
+
+    interface ActiveToken {
+      group: import("three").Group;
+      config: TokenConfig;
+      geos: import("three").BufferGeometry[];
+      mats: import("three").Material[];
+      textures: import("three").CanvasTexture[];
+    }
+
+    const activeTokens: ActiveToken[] = [];
+
+    tokensData.forEach((cfg) => {
+      const { geo, decalGeo, thickness, bevelThickness } = createSquircleTile(cfg.size, cfg.radius, cfg.thickness);
+      const iconData = brandIconsData[cfg.id] || { title: cfg.id, hex: "#4285F4", path: "", isDark: false };
+      const texture = createOfficialBrandTexture(iconData);
+
+      const edgeMaterial = new THREE.MeshStandardMaterial({
+        color: cfg.edgeColor,
+        roughness: 0.35,
+        metalness: 0.05,
+      });
+
+      const frontMaterial = new THREE.MeshPhysicalMaterial({
+        map: texture,
+        roughness: 0.25,
+        metalness: 0.05,
+        clearcoat: 0.05,
+        reflectivity: 0.2,
+        polygonOffset: true,
+        polygonOffsetFactor: -1,
+        polygonOffsetUnits: -1,
+      });
+
+      const tokenGroup = new THREE.Group();
+
+      // Core tile mesh
+      const coreMesh = new THREE.Mesh(geo, edgeMaterial);
+      tokenGroup.add(coreMesh);
+
+      // Front face decal - placed cleanly on the outer front surface of core mesh
+      const frontMesh = new THREE.Mesh(decalGeo, frontMaterial);
+      frontMesh.position.z = thickness / 2 + bevelThickness + 0.005;
+      tokenGroup.add(frontMesh);
+
+      // Back face decal - so rotating 360 shows the same clean logo
+      const backMesh = new THREE.Mesh(decalGeo, frontMaterial);
+      backMesh.position.z = -thickness / 2 - bevelThickness - 0.005;
+      backMesh.rotation.y = Math.PI;
+      tokenGroup.add(backMesh);
+
+      tokenGroup.position.set(cfg.baseX, cfg.baseY, cfg.baseZ);
+      tokenGroup.rotation.set(cfg.rotX, cfg.rotY, cfg.rotZ);
+
+      clusterGroup.add(tokenGroup);
+
+      activeTokens.push({
+        group: tokenGroup,
+        config: cfg,
+        geos: [geo, decalGeo],
+        mats: [edgeMaterial, frontMaterial],
+        textures: [texture],
+      });
+    });
+
+    // 6. Dynamic Camera Distance on Resize
+    function updateCameraFit() {
+      if (!canvas) return;
+      const width = canvas.clientWidth;
+      const height = canvas.clientHeight;
+      if (width === 0 || height === 0) return;
+
+      const aspect = width / height;
+      camera.aspect = aspect;
+
+      const vFovRad = (camera.fov * Math.PI) / 180;
+      const targetWidth = 4.6;
+      const targetHeight = 3.2;
+
+      const distH = (targetWidth / 2) / (Math.tan(vFovRad / 2) * aspect);
+      const distV = (targetHeight / 2) / Math.tan(vFovRad / 2);
+
+      camera.position.z = Math.max(distH, distV, 5.0);
+      camera.updateProjectionMatrix();
+      renderer.setSize(width, height, false);
+    }
+
+    updateCameraFit();
+
+    // Hide loader
+    if (loader) {
+      loader.classList.add("opacity-0", "pointer-events-none");
+      setTimeout(() => loader.remove(), 500);
+    }
+
+    // 7. Interaction Parallax (Pointer Move & Inertia)
+    let pointerX = 0;
+    let pointerY = 0;
+    let targetTiltX = 0;
+    let targetTiltY = 0;
+    let currentTiltX = 0;
+    let currentTiltY = 0;
+    let hasInteracted = false;
+
+    window.addEventListener("pointermove", (e) => {
+      const rect = canvas.getBoundingClientRect();
+      if (e.clientY < rect.bottom + 200 && e.clientY > rect.top - 200) {
+        pointerX = ((e.clientX - (rect.left + rect.width / 2)) / (window.innerWidth / 2));
+        pointerY = ((e.clientY - (rect.top + rect.height / 2)) / (window.innerHeight / 2));
+        
+        targetTiltY = pointerX * 0.35;
+        targetTiltX = -pointerY * 0.25;
+
+        if (hint && !hasInteracted) {
+          hint.classList.add("opacity-0");
+          hasInteracted = true;
+        }
+      }
+    });
+
+    // 8. Visibility & Resize Observers
+    let isVisible = true;
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach((entry) => {
+        isVisible = entry.isIntersecting;
+      });
+    }, { threshold: 0.05 });
+
+    observer.observe(canvas);
+
+    function onResize() {
+      updateCameraFit();
+    }
+    window.addEventListener("resize", onResize);
+
+    // 9. Animation Loop (60fps)
+    const startTime = performance.now();
+    let animationFrameId: number;
+
+    function animate(currentTime: number = performance.now()) {
+      animationFrameId = requestAnimationFrame(animate);
+
+      if (!isVisible) return; // Pause WebGL rendering when off-screen
+
+      const time = (currentTime - startTime) * 0.001;
+
+      // Smooth camera/cluster tilt lerp
+      currentTiltX += (targetTiltX - currentTiltX) * 0.06;
+      currentTiltY += (targetTiltY - currentTiltY) * 0.06;
+
+      clusterGroup.rotation.x = currentTiltX;
+      clusterGroup.rotation.y = currentTiltY;
+
+      // Subtle levitation & individual depth parallax per token
+      activeTokens.forEach(({ group, config }) => {
+        if (!prefersReducedMotion) {
+          // Floating Y movement
+          group.position.y = config.baseY + Math.sin(time * config.floatSpeed + config.floatPhase) * config.floatAmp;
+          // Gentle rotation oscillation
+          group.rotation.x = config.rotX + Math.sin(time * 0.9 + config.floatPhase) * 0.04;
+          group.rotation.y = config.rotY + Math.cos(time * 0.8 + config.floatPhase) * 0.05;
+        }
+
+        // Parallax position offset according to Z depth
+        group.position.x = config.baseX + currentTiltY * (config.zParallax * 0.3);
+      });
+
+      renderer.render(scene, camera);
+    }
+
+    animate();
+
+    // 10. Cleanup on window unload
+    window.addEventListener("beforeunload", () => {
+      cancelAnimationFrame(animationFrameId);
+      observer.disconnect();
+      window.removeEventListener("resize", onResize);
+      activeTokens.forEach(({ geos, mats, textures }) => {
+        geos.forEach(g => g.dispose());
+        mats.forEach(m => m.dispose());
+        textures.forEach(t => t.dispose());
+      });
+      renderer.dispose();
+    });
+  }
+
+  // Initialize once DOM is ready
+  if (document.readyState === "loading") {
+    document.addEventListener("DOMContentLoaded", setupLazyHero3D);
+  } else {
+    setupLazyHero3D();
+  }
+</script>

@@ -1,0 +1,79 @@
+---
+import { siteConfig } from "../data/siteConfig";
+const currentYear = new Date().getFullYear();
+---
+
+<footer class="bg-zinc-950 text-white border-t border-zinc-900 pb-24 sm:pb-12 pt-16">
+  <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+    <div class="grid grid-cols-1 md:grid-cols-4 gap-10 mb-12">
+      
+      <!-- Column 1: Brand & Bio -->
+      <div class="md:col-span-2">
+        <div class="flex items-center gap-3 mb-5">
+          <img
+            src="/logo-KP-white.png"
+            alt="Kamil Pitner Logo"
+            class="h-10 w-auto object-contain"
+            width="40"
+            height="40"
+          />
+        </div>
+        <p class="text-sm text-zinc-400 max-w-md leading-relaxed mb-6">
+          Tworzę nowoczesne strony internetowe, prowadzę skuteczne kampanie reklamowe Google Ads oraz dbam o widoczność w Mapach Google. Współpracuję z firmami w całej Polsce.
+        </p>
+        <div class="text-xs text-zinc-500">
+          Projekt i realizacja: Kamil Pitner • Wszelkie prawa zastrzeżone
+        </div>
+      </div>
+
+      <!-- Column 2: Nawigacja -->
+      <div>
+        <h4 class="text-xs font-bold uppercase tracking-wider text-zinc-300 mb-4">Oferta & Usługi</h4>
+        <ul class="space-y-2.5 text-sm text-zinc-400">
+          <li><a href="/strony-www" class="hover:text-white transition-colors">Strony Internetowe</a></li>
+          <li><a href="/google-ads" class="hover:text-white transition-colors">Kampanie Google Ads</a></li>
+          <li><a href="/google-moja-firma" class="hover:text-white transition-colors">Wizytówki Google Maps</a></li>
+          <li><a href="/opinie-nfc" class="hover:text-white transition-colors">Karty NFC na Opinie</a></li>
+          <li><a href="/blog" class="hover:text-white transition-colors">Baza wiedzy & Poradniki</a></li>
+          <li><a href="/#dlaczego-ja" class="hover:text-white transition-colors">Dlaczego ja</a></li>
+          <li><a href="/#faq" class="hover:text-white transition-colors">Częste pytania (FAQ)</a></li>
+        </ul>
+      </div>
+
+      <!-- Column 3: Bezpośredni kontakt -->
+      <div>
+        <h4 class="text-xs font-bold uppercase tracking-wider text-zinc-300 mb-4">Kontakt</h4>
+        <div class="space-y-3">
+          <div>
+            <div class="text-xs text-zinc-500 mb-1">Telefon bezpośredni:</div>
+            <a href={`tel:${siteConfig.phoneRaw}`} class="font-bold text-base text-[#ccff00] hover:underline flex items-center gap-1.5 tabular-nums">
+              <span>{siteConfig.phone}</span>
+            </a>
+          </div>
+          <div>
+            <div class="text-xs text-zinc-500 mb-1">E-mail:</div>
+            <a href={`mailto:${siteConfig.email}`} class="text-sm text-zinc-300 hover:text-white transition-colors">
+              {siteConfig.email}
+            </a>
+          </div>
+          <div>
+            <div class="text-xs text-zinc-500 mb-1">Obszar działania:</div>
+            <span class="text-xs text-zinc-400">{siteConfig.location}</span>
+          </div>
+        </div>
+      </div>
+
+    </div>
+
+    <!-- Bottom Bar -->
+    <div class="pt-8 border-t border-zinc-900 flex flex-col sm:flex-row items-center justify-between gap-4 text-xs text-zinc-500">
+      <p>© {currentYear} {siteConfig.name}. Wszelkie prawa zastrzeżone.</p>
+      <a href="#" class="hover:text-white transition-colors flex items-center gap-1">
+        <span>Wróć na górę strony</span>
+        <svg xmlns="http://www.w3.org/2000/svg" class="w-3.5 h-3.5" viewBox="0 0 20 20" fill="currentColor">
+          <path fill-rule="evenodd" d="M14.707 12.707a1 1 0 01-1.414 0L10 9.414l-3.293 3.293a1 1 0 01-1.414-1.414l4-4a1 1 0 011.414 0l4 4a1 1 0 010 1.414z" clip-rule="evenodd" />
+        </svg>
+      </a>
+    </div>
+  </div>
+</footer>

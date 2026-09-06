@@ -1,0 +1,162 @@
+---
+import "../styles/global.css";
+import { siteConfig } from "../data/siteConfig";
+
+interface Props {
+  title?: string;
+  description?: string;
+}
+
+const {
+  title = `${siteConfig.name} – Nowoczesne Strony WWW, Kampanie Google & FB Ads, Wizytówki Google`,
+  description = siteConfig.tagline
+} = Astro.props;
+
+const canonicalUrl = new URL(Astro.url.pathname, Astro.site || "https://kamilpitner.pl");
+
+const jsonLd = {
+  "@context": "https://schema.org",
+  "@type": "ProfessionalService",
+  "name": siteConfig.name,
+  "description": siteConfig.tagline,
+  "telephone": siteConfig.phone,
+  "email": siteConfig.email,
+  "url": canonicalUrl.toString(),
+  "areaServed": "Polska",
+  "priceRange": "$$",
+  "hasOfferCatalog": {
+    "@type": "OfferCatalog",
+    "name": "Usługi Marketingowe i Tworzenie Stron WWW",
+    "itemListElement": siteConfig.services.map((service, index) => ({
+      "@type": "Offer",
+      "position": index + 1,
+      "itemOffered": {
+        "@type": "Service",
+        "name": service.title,
+        "description": service.shortDesc
+      }
+    }))
+  }
+};
+---
+
+<!doctype html>
+<html lang="pl" class="scroll-smooth">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="icon" type="image/png" href="/logo-KP.png" />
+    <meta name="generator" content={Astro.generator} />
+
+    <!-- SEO Meta Tags -->
+    <title>{title}</title>
+    <meta name="description" content={description} />
+    <meta name="robots" content="index, follow" />
+    <link rel="canonical" href={canonicalUrl} />
+
+    <!-- Open Graph / Facebook -->
+    <meta property="og:type" content="website" />
+    <meta property="og:url" content={canonicalUrl} />
+    <meta property="og:title" content={title} />
+    <meta property="og:description" content={description} />
+    <meta property="og:locale" content="pl_PL" />
+
+    <!-- Twitter Cards -->
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content={title} />
+    <meta name="twitter:description" content={description} />
+
+    <!-- Theme Color -->
+    <meta name="theme-color" content="#ffffff" />
+
+    <!-- Google Fonts: Plus Jakarta Sans for crisp modern readability -->
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+
+    <!-- Schema.org Structured Data -->
+    <script type="application/ld+json" set:html={JSON.stringify(jsonLd)} />
+
+    <style>
+      body {
+        font-family: 'Plus Jakarta Sans', system-ui, -apple-system, sans-serif;
+      }
+    </style>
+  </head>
+  <body class="bg-[#fcfbfa] text-[#18181b] antialiased selection:bg-[#ccff00] selection:text-black min-h-screen flex flex-col">
+    <!-- Toast Notification for clipboard -->
+    <div
+      id="clipboard-toast"
+      class="fixed top-6 left-1/2 -translate-x-1/2 z-50 px-5 py-2.5 rounded-full bg-zinc-950 text-white text-sm font-semibold shadow-2xl flex items-center gap-2.5 transition-all duration-300 opacity-0 pointer-events-none translate-y-[-10px] border border-zinc-800"
+    >
+      <span class="w-2.5 h-2.5 rounded-full bg-[#ccff00] animate-pulse"></span>
+      <span>Numer telefonu skopiowany do schowka!</span>
+    </div>
+
+    <slot />
+
+    <script>
+      // Global copy to clipboard helper
+      function setupCopyButtons() {
+        const copyBtns = document.querySelectorAll<HTMLElement>("[data-copy-phone]");
+        const toast = document.getElementById("clipboard-toast");
+
+        copyBtns.forEach((btn) => {
+          btn.addEventListener("click", async (e) => {
+            e.preventDefault();
+            const phone = btn.getAttribute("data-copy-phone");
+            if (!phone) return;
+
+            try {
+              await navigator.clipboard.writeText(phone);
+              if (toast) {
+                toast.classList.remove("opacity-0", "pointer-events-none", "translate-y-[-10px]");
+                toast.classList.add("opacity-100", "translate-y-0");
+
+                setTimeout(() => {
+                  toast.classList.add("opacity-0", "pointer-events-none", "translate-y-[-10px]");
+                  toast.classList.remove("opacity-100", "translate-y-0");
+                }, 2800);
+              }
+            } catch (err) {
+              console.error("Nie udało się skopiować:", err);
+            }
+          });
+        });
+      }
+
+      // Performant scroll reveal using IntersectionObserver
+      function setupScrollReveal() {
+        const prefersReduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+        const revealElements = document.querySelectorAll<HTMLElement>(".reveal-on-scroll");
+
+        if (prefersReduced) {
+          revealElements.forEach((el) => el.classList.add("is-visible"));
+          return;
+        }
+
+        const observer = new IntersectionObserver(
+          (entries) => {
+            entries.forEach((entry) => {
+              if (entry.isIntersecting) {
+                entry.target.classList.add("is-visible");
+                observer.unobserve(entry.target);
+              }
+            });
+          },
+          {
+            threshold: 0.12,
+            rootMargin: "0px 0px -30px 0px",
+          }
+        );
+
+        revealElements.forEach((el) => observer.observe(el));
+      }
+
+      document.addEventListener("DOMContentLoaded", () => {
+        setupCopyButtons();
+        setupScrollReveal();
+      });
+    </script>
+  </body>
+</html>

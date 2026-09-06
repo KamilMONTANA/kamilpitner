@@ -1,0 +1,631 @@
+---
+import Layout from "../layouts/Layout.astro";
+import Header from "../components/Header.astro";
+import Footer from "../components/Footer.astro";
+import MobileCallButton from "../components/MobileCallButton.astro";
+import CallToAction from "../components/CallToAction.astro";
+import ServiceHeroArch from "../components/ServiceHeroArch.astro";
+import { siteConfig } from "../data/siteConfig";
+
+const mistakes = [
+  {
+    icon: "✕",
+    title: "Ładowanie dłużej niż 3 sekundy",
+    desc: "Ociężałe, przestarzałe szablony i masa zbędnych dodatków sprawiają, że klient widzi biały ekran. Po 3 sekundach rezygnuje i przechodzi do Twojej konkurencji."
+  },
+  {
+    icon: "✕",
+    title: "Brak szybkiego kontaktu i formularza",
+    desc: "Gdy numer jest schowany w menu, a formularz wymaga wpisywania dziesięciu pól – tracisz większość zapytań. Klient musi móc zadzwonić 1 kliknięciem lub wysłać proste zapytanie w 15 sekund."
+  },
+  {
+    icon: "✕",
+    title: "Wieczne awarie i skomplikowana edycja",
+    desc: "Strony oparte o stare systemy wiecznie wymagają ryzykownych aktualizacji, psują się same z siebie, a prosta zmiana ceny czy tekstu jest drogą przez mękę."
+  }
+];
+
+const deliverables = [
+  {
+    title: "Dwa wygodne kanały: telefon i szybki formularz",
+    desc: "Część klientów chce zadzwonić od razu, a część woli zostawić numer lub krótki opis zlecenia wieczorem. Twoja strona ułatwia jedno i drugie, a powiadomienia o zapytaniach trafiają natychmiast do Ciebie."
+  },
+  {
+    title: "Prosty panel do edycji – zmieniasz teksty bez informatyka",
+    desc: "Dostajesz przejrzysty, lekki panel zarządzania stroną. W kilka sekund zmienisz cennik, dodasz nowe zdjęcia z realizacji czy zaktualizujesz ofertę – bez ryzyka, że cokolwiek na stronie się 'rozjedzie'."
+  },
+  {
+    title: "Błyskawiczne tempo otwierania (< 0.5 sekundy)",
+    desc: "Nowoczesna, lekka technologia bez ociężałych szablonów. Strona ładuje się w mgnieniu oka zarówno na telefonie w trasie, jak i na komputerze, zyskując maksymalne oceny w testach Google."
+  },
+  {
+    title: "Teksty piszę za Ciebie – zero tracenia czasu",
+    desc: "Nie musisz tworzyć referatów ani główkować nad treściami. Po krótkiej rozmowie sam przygotowuję konkretne teksty, które jasno tłumaczą Twoje usługi i przekonują klientów do kontaktu."
+  },
+  {
+    title: "Kompletna konfiguracja: domena, bezpieczeństwo, poczta",
+    desc: "Zajmuję się wszystkim: rejestracją i podpięciem adresu strony, bezpiecznym szyfrowaniem połączeń, skrzynkami e-mail oraz ultraszybkim serwerem. Otrzymujesz działające 'pod klucz' rozwiązanie."
+  },
+  {
+    title: "Stała opieka techniczna i monitoring (Abonament)",
+    desc: "O stronę trzeba stale dbać od strony technicznej: pilnuję bezpieczeństwa, odnawiania adresu i certyfikatów, codziennych kopii zapasowych oraz działania 24/7. Ty wygodnie zarządzasz treściami przez panel, a ja dbam o bezawaryjną infrastrukturę."
+  }
+];
+
+const portfolioProjects = [
+  {
+    title: "Serwis Pomp Ciepła & HVAC",
+    category: "Instalacje & Ogrzewanie",
+    metric: "+240% telefonów",
+    metricLabel: "w pierwszym miesiącu",
+    desc: "Strona nastawiona na szybkie zgłoszenia awarii oraz przeglądy sezonowe. Klient jednym dotknięciem dzwoni do serwisanta.",
+    highlights: ["Czas otwarcia 0.38s", "Pływający przycisk zadzwoń", "Szybki formularz wyceny"]
+  },
+  {
+    title: "Prywatny Gabinet Stomatologiczny",
+    category: "Medycyna & Zdrowie",
+    metric: "35 nowych pacjentów",
+    metricLabel: "miesięcznie z Google",
+    desc: "Czysty, elegancki design budujący zaufanie. Przejrzysty cennik zabiegów, prezentacja zespołu i natychmiastowa rezerwacja terminu.",
+    highlights: ["Czysta typografia i biel", "Zintegrowane opinie Google 5.0", "Mobilne menu zabiegów"]
+  },
+  {
+    title: "Firma Brukarska & Bruk-Bet",
+    category: "Budownictwo & Ogród",
+    metric: "Kalendarz zapełniony",
+    metricLabel: "na 3 miesiące do przodu",
+    desc: "Skupienie na galeriach realizacji przed i po, obszarze dojazdu oraz przejrzystym cenniku za metr kwadratowy.",
+    highlights: ["Lekka galeria zdjęć HD", "Wskaźnik wolnych terminów", "Formularz wyceny z dojazdem"]
+  },
+  {
+    title: "Auto Serwis & Mechanika Pojazdowa",
+    category: "Motoryzacja / Warsztat",
+    metric: "+180 zapytań",
+    metricLabel: "o naprawy i diagnostykę",
+    desc: "Brak zbędnych animacji – natychmiastowa lista najczęstszych napraw, mapa dojazdu z nawigacją GPS i bezpośredni telefon.",
+    highlights: ["Nawigacja Google Maps 1-click", "Przejrzysta lista usług", "Bezpośredni kontakt do mistrza"]
+  },
+  {
+    title: "Kancelaria Prawno-Podatkowa",
+    category: "Prawo & Doradztwo",
+    metric: "4x więcej zapytań",
+    metricLabel: "o audyty i reprezentację",
+    desc: "Spokojna, prestiżowa estetyka. Natychmiastowe zdefiniowanie specjalizacji, jasne stawki konsultacji i bezpieczny formularz poufny.",
+    highlights: ["Poufny formularz szybkiej sprawy", "Przejrzyste pakiety doradztwa", "Błyskawiczne ładowanie"]
+  },
+  {
+    title: "Instalacje Elektryczne & Smart Home",
+    category: "Elektryka & Automatyka",
+    metric: "Stałe zlecenia",
+    metricLabel: "z domów jednorodzinnych",
+    desc: "Strona pokazująca profesjonalne certyfikaty, estetykę montażu rozdzielnic oraz szybki konfigurator zapotrzebowania.",
+    highlights: ["Kalkulator orientacyjnego kosztu", "Pogotowie awaryjne 1-klik", "Referencje i certyfikaty SEP"]
+  }
+];
+
+const steps = [
+  {
+    step: "01",
+    title: "Rozmowa telefoniczna (15 minut)",
+    desc: "Ustalamy czym się zajmujesz, jakie zlecenia są dla Ciebie najbardziej opłacalne i w jakim promieniu kilometrów działasz."
+  },
+  {
+    step: "02",
+    title: "Opracowanie tekstów i makiety (3 dni)",
+    desc: "Piszę chwytliwe teksty, przygotowuję układ graficzny pod smartfony i wysyłam Ci wersję roboczą do kliknięcia na własnym telefonie."
+  },
+  {
+    step: "03",
+    title: "Dopracowanie i uruchomienie (2 dni)",
+    desc: "Wprowadzamy ewentualne uwagi, konfigurujemy formularze i powiadomienia, podpinamy Twoją domenę i przekazuję Ci prosty panel do wprowadzania zmian."
+  }
+];
+
+const faqs = [
+  {
+    q: "Ile kosztuje profesjonalna strona internetowa?",
+    a: "Cena zależy od zakresu usług (strona one-page nastawiona na telefon czy rozbudowany serwis z podstronami dla każdej usługi). Zawsze podaję stałą, zryczałtowaną wycenę przed rozpoczęciem prac – bez niespodzianek i bez ukrytych kosztów."
+  },
+  {
+    q: "Czy będę mógł samodzielnie zmieniać ceny i teksty na stronie?",
+    a: "Tak! Otrzymujesz przejrzysty, lekki panel zarządzania. Zmiana cennika, dopisanie nowej usługi czy wgranie zdjęć z realizacji zajmuje minutę i jest tak proste jak pisanie e-maila. Bez skomplikowanych i ciągle psujących się starych systemów, z gwarancją, że niczego przypadkowo nie popsujesz."
+  },
+  {
+    q: "W jaki sposób klienci mogą się ze mną skontaktować ze strony?",
+    a: "Dostosowujemy to do Twoich preferencji: bezpośredni przycisk do szybkiego połączenia telefonicznego pod kciukiem na smartfonie oraz prosty formularz szybkiej wyceny (np. dla klientów, którzy szukają usług wieczorem i wolą zostawić numer telefonu). Wszystkie powiadomienia trafiają natychmiast do Ciebie."
+  },
+  {
+    q: "Czy muszę samodzielnie pisać teksty i dobierać zdjęcia?",
+    a: "Zdecydowanie nie. Większość moich klientów nie ma na to czasu. Po krótkiej rozmowie sam tworzę całą zawartość merytoryczną dostosowaną do lokalnych klientów. Jeśli posiadasz zdjęcia ze swoich zleceń – umieścimy je, a jeśli nie – dobiorę profesjonalne materiały branżowe."
+  },
+  {
+    q: "Ile trwa realizacja od rozmowy do uruchomienia?",
+    a: "Gotowa strona zazwyczaj jest w pełni online w ciągu 3 do 7 dni roboczych. Szanuję Twój czas i nie przeciągam projektów w nieskończoność."
+  },
+  {
+    q: "Dlaczego opieka nad stroną jest w abonamencie?",
+    a: "Dobra strona wymaga stabilnego, bezpiecznego zaplecza technicznego. W ramach abonamentu dbam o ultra-szybki serwer, bezpieczeństwo, odnawianie domeny i certyfikatów SSL, codzienne kopie zapasowe oraz stały monitoring działania 24/7. Proste zmiany w cenniku czy ofercie wprowadzasz samodzielnie w 30 sekund w panelu, a ja pilnuję, by infrastruktura techniczna działała bezawaryjnie."
+  },
+  {
+    q: "Co jeśli będę chciał zrezygnować ze współpracy?",
+    a: "Wszystko odbywa się na przejrzystych zasadach. Strona oraz domena są Twoją własnością, a warunki współpracy są jasne i bez długoterminowych kar umownych."
+  }
+];
+---
+
+<Layout
+  title="Strony WWW dla Firm Usługowych – Nowoczesne i Skuteczne | Kamil Pitner"
+  description="Projektuję nowoczesne, ultra-szybkie strony internetowe dla firm usługowych. Błyskawiczny kontakt, proste formularze zapytań i intuicyjny panel edycji bez awarii."
+>
+  <Header />
+
+  <main>
+    <!-- Subpage Hero with Mobile Performance Mockup -->
+    <section class="py-16 md:py-24 bg-[#fae8e8]/50 border-b border-[#f5d0d4] relative overflow-hidden">
+      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        
+        <!-- Breadcrumb -->
+        <nav class="flex items-center gap-2 text-xs font-semibold text-zinc-500 mb-8" aria-label="Breadcrumb">
+          <a href="/" class="hover:text-zinc-950 transition-colors">Strona główna</a>
+          <span>/</span>
+          <span>Usługi</span>
+          <span>/</span>
+          <span class="text-zinc-900">Strony WWW</span>
+        </nav>
+
+        <div class="grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-16 items-center">
+          
+          <!-- Hero Copy Left (Span 7) -->
+          <div class="lg:col-span-7 space-y-6 reveal-on-scroll">
+            <h1 class="text-4xl sm:text-5xl lg:text-6xl font-extrabold text-zinc-950 tracking-tight leading-[1.12]">
+              Strona WWW, która zamienia odwiedzających w klientów.
+            </h1>
+
+            <p class="text-lg sm:text-xl text-zinc-700 font-normal leading-relaxed max-w-2xl">
+              Niezależnie czy klient woli zadzwonić od razu, czy zostawić szybkie zapytanie w formularzu – Twoja strona ułatwia kontakt w kilka sekund. Bez awarii, bez zacinania i z prostym panelem do samodzielnej edycji.
+            </p>
+
+            <div class="flex flex-col sm:flex-row items-stretch sm:items-center gap-4 pt-2">
+              <a
+                href={`tel:${siteConfig.phoneRaw}`}
+                class="inline-flex items-center justify-center gap-3 px-8 py-4 rounded-2xl bg-zinc-950 text-white text-base font-extrabold shadow-xl hover:bg-zinc-800 transition-all border border-zinc-900 btn-tactile"
+              >
+                <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4 text-[#ccff00]" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5">
+                  <path stroke-linecap="round" stroke-linejoin="round" d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z" />
+                </svg>
+                <span>Porozmawiajmy o projekcie</span>
+              </a>
+
+              <a
+                href="#moje-prace"
+                class="inline-flex items-center justify-center px-6 py-4 rounded-2xl bg-white text-zinc-800 text-base font-bold hover:bg-zinc-100 border border-zinc-300 transition-all shadow-xs"
+              >
+                <span>Zobacz moje prace ↓</span>
+              </a>
+            </div>
+
+            <!-- Clean Value Row (No badges) -->
+            <div class="pt-4 flex flex-wrap items-center gap-6 text-sm text-zinc-700 font-semibold border-t border-[#f5d0d4]/80">
+              <div class="flex items-center gap-2">
+                <span class="text-emerald-700 font-extrabold text-base">✓</span>
+                <span>Telefon + prosty formularz zapytań</span>
+              </div>
+              <div class="flex items-center gap-2">
+                <span class="text-emerald-700 font-extrabold text-base">✓</span>
+                <span>Intuicyjna edycja bez ryzyka awarii</span>
+              </div>
+              <div class="flex items-center gap-2">
+                <span class="text-emerald-700 font-extrabold text-base">✓</span>
+                <span>Opieka i monitoring w abonamencie</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- Hero Graphic Right (Span 5): 3D Service Arch Card (Strony WWW) -->
+          <div class="lg:col-span-5 reveal-on-scroll delay-100 flex items-center justify-center">
+            <ServiceHeroArch serviceId="strony-www" />
+          </div>
+
+        </div>
+
+      </div>
+    </section>
+
+    <!-- 1. Comparison Section: Stary Standard vs Nowy Standard (Split Contrast) -->
+    <section class="py-20 md:py-28 bg-white border-b border-[#e7e5e4]">
+      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div class="text-center max-w-3xl mx-auto mb-16 reveal-on-scroll">
+          <span class="text-xs font-extrabold uppercase tracking-wider text-zinc-400">Porównanie w praktyce</span>
+          <h2 class="text-3xl sm:text-4xl lg:text-5xl font-extrabold text-zinc-950 tracking-tight mt-1 mb-4">
+            Przestań tracić klientów przez błędy z przeszłości
+          </h2>
+          <p class="text-base sm:text-lg text-zinc-600 leading-relaxed max-w-2xl mx-auto">
+            Większość stron powstaje na skomplikowanych, ociężałych szablonach, które odstraszają klientów i wiecznie sprawiają problemy właścicielom.
+          </p>
+        </div>
+
+        <!-- Split Cards -->
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-8 items-stretch max-w-5xl mx-auto">
+          
+          <!-- Old Standard Card -->
+          <div class="p-8 sm:p-10 rounded-3xl bg-[#f8f7f5] border border-zinc-200/90 flex flex-col justify-between space-y-6 reveal-on-scroll delay-100">
+            <div class="space-y-4">
+              <span class="text-xs font-extrabold uppercase tracking-wider text-rose-600 block">
+                ✕ Przestarzała Strona
+              </span>
+              <h3 class="text-2xl font-extrabold text-zinc-950 tracking-tight">Ociężały szablon, który odstrasza klientów</h3>
+              <p class="text-sm sm:text-base text-zinc-600 leading-relaxed">
+                Ładuje się 4–6 sekund na telefonie. Numer ukryty w menu, a formularz wymaga wpisania 10 pól. Każda próba zmiany tekstu czy cennika grozi zawieszeniem strony lub wymaga wzywania informatyka.
+              </p>
+            </div>
+
+            <ul class="space-y-3.5 text-xs sm:text-sm font-semibold text-zinc-600 border-t border-zinc-200/80 pt-6">
+              <li class="flex items-center gap-2.5 text-rose-600">
+                <span class="font-bold">✕</span> <span class="text-zinc-700">Ponad 50% klientów ucieka przed załadowaniem</span>
+              </li>
+              <li class="flex items-center gap-2.5 text-rose-600">
+                <span class="font-bold">✕</span> <span class="text-zinc-700">Wiecznie psujące się wtyczki i ryzykowne aktualizacje</span>
+              </li>
+              <li class="flex items-center gap-2.5 text-rose-600">
+                <span class="font-bold">✕</span> <span class="text-zinc-700">Zero kontroli: brak prostego panelu do edycji cennika</span>
+              </li>
+            </ul>
+          </div>
+
+          <!-- New Standard Card (Hero Winner) -->
+          <div class="p-8 sm:p-10 rounded-3xl bg-white border-2 border-zinc-950 shadow-xl flex flex-col justify-between space-y-6 relative overflow-hidden card-hover-depth reveal-on-scroll delay-200">
+            <div class="absolute top-0 right-0 w-36 h-36 bg-[#ccff00] rounded-bl-[120px] opacity-20 pointer-events-none"></div>
+
+            <div class="space-y-4 relative z-10">
+              <span class="text-xs font-extrabold uppercase tracking-wider text-zinc-950 block">
+                ✓ Nowy Standard 2026
+              </span>
+              <h3 class="text-2xl font-extrabold text-zinc-950 tracking-tight">Błyskawiczny kontakt + bezpieczny panel</h3>
+              <p class="text-sm sm:text-base text-zinc-600 leading-relaxed">
+                Otwarcie w ułamku sekundy (&lt; 0.4s). Klient ma pod kciukiem bezpośredni telefon oraz prosty formularz szybkiej wyceny. Zmieniasz cennik i ofertę w 30 sekund bez obaw, że cokolwiek się popsuje.
+              </p>
+            </div>
+
+            <ul class="space-y-3.5 text-xs sm:text-sm font-semibold text-zinc-800 border-t border-zinc-100 pt-6 relative z-10">
+              <li class="flex items-center gap-2.5">
+                <span class="w-5 h-5 rounded-full bg-[#ccff00] text-zinc-950 flex items-center justify-center text-xs font-bold shrink-0">✓</span>
+                <span>1 kliknięcie do połączenia lub wysłania zapytania</span>
+              </li>
+              <li class="flex items-center gap-2.5">
+                <span class="w-5 h-5 rounded-full bg-[#ccff00] text-zinc-950 flex items-center justify-center text-xs font-bold shrink-0">✓</span>
+                <span>Intuicyjny panel edycji: zmieniasz ceny w 30 sekund</span>
+              </li>
+              <li class="flex items-center gap-2.5">
+                <span class="w-5 h-5 rounded-full bg-[#ccff00] text-zinc-950 flex items-center justify-center text-xs font-bold shrink-0">✓</span>
+                <span>Pełna opieka, hosting i monitoring w abonamencie</span>
+              </li>
+            </ul>
+          </div>
+
+        </div>
+      </div>
+    </section>
+
+    <!-- 2. Bento Grid Section: Architektura Twojej Strony (Asymmetric Layout) -->
+    <section class="py-20 md:py-28 bg-[#fcfbfa] border-b border-[#e7e5e4]">
+      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div class="max-w-3xl mb-16 reveal-on-scroll">
+          <span class="text-xs font-extrabold uppercase tracking-wider text-zinc-400">Kompleksowa Architektura</span>
+          <h2 class="text-3xl sm:text-4xl lg:text-5xl font-extrabold text-zinc-950 tracking-tight mt-1 mb-4">
+            Wszystko, czego potrzebuje Twoja firma
+          </h2>
+          <p class="text-base sm:text-lg text-zinc-600 leading-relaxed">
+            Dostajesz gotowe, przetestowane narzędzie do zdobywania zleceń. Bez technicznego żargonu i bez zrzucania pracy na Twoje barki.
+          </p>
+        </div>
+
+        <!-- Asymmetric Bento Grid -->
+        <div class="grid grid-cols-1 md:grid-cols-12 gap-6">
+          
+          <!-- Bento Tile 1 (Span 7): Podwójny Silnik Zapytań -->
+          <div class="md:col-span-7 p-8 sm:p-10 rounded-3xl bg-white border border-zinc-200 shadow-xs flex flex-col justify-between space-y-6 hover:border-zinc-300 transition-all card-hover-depth reveal-on-scroll delay-100">
+            <div class="space-y-3">
+              <div class="w-10 h-10 rounded-xl bg-zinc-950 text-[#ccff00] flex items-center justify-center shadow-xs">
+                <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5 text-[#ccff00]" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                  <path stroke-linecap="round" stroke-linejoin="round" d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z" />
+                </svg>
+              </div>
+              <h3 class="text-2xl font-extrabold text-zinc-950 tracking-tight">
+                Dwa niezawodne kanały: telefon i szybki formularz
+              </h3>
+              <p class="text-sm sm:text-base text-zinc-600 leading-relaxed max-w-xl">
+                Klient potrzebujący pilnej pomocy dzwoni od razu jednym dotknięciem kciuka. Klient szukający wyceny wieczorem wypełnia prosty formularz zapytań, a powiadomienie natychmiast ląduje u Ciebie.
+              </p>
+            </div>
+
+            <!-- Visual Badge Row -->
+            <div class="p-4 rounded-2xl bg-[#fcfbfa] border border-zinc-200 flex flex-col sm:flex-row items-center justify-between gap-4">
+              <div class="flex items-center gap-3 w-full sm:w-auto">
+                <div class="w-9 h-9 rounded-xl bg-[#ccff00] text-zinc-950 flex items-center justify-center shadow-xs">
+                  <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4 text-zinc-950" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.25">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z" />
+                  </svg>
+                </div>
+                <div class="text-xs font-bold text-zinc-900">
+                  Bezpośredni telefon pod kciukiem
+                </div>
+              </div>
+              <span class="text-zinc-300 font-bold hidden sm:inline">+</span>
+              <div class="flex items-center gap-3 w-full sm:w-auto">
+                <div class="w-9 h-9 rounded-xl bg-zinc-950 text-white flex items-center justify-center shadow-xs">
+                  <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
+                  </svg>
+                </div>
+                <div class="text-xs font-bold text-zinc-900">
+                  Formularz wyceny w 15 sekund
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Bento Tile 2 (Span 5): Prosty Panel Edycji -->
+          <div class="md:col-span-5 p-8 sm:p-10 rounded-3xl bg-[#f4f3f0] border border-zinc-200 shadow-xs flex flex-col justify-between space-y-6 hover:border-zinc-300 transition-all card-hover-depth reveal-on-scroll delay-200">
+            <div class="space-y-3">
+              <div class="w-10 h-10 rounded-xl bg-white text-zinc-950 border border-zinc-200 flex items-center justify-center shadow-2xs">
+                <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5 text-zinc-900" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                  <path stroke-linecap="round" stroke-linejoin="round" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" />
+                </svg>
+              </div>
+              <h3 class="text-2xl font-extrabold text-zinc-950 tracking-tight">
+                Edytujesz teksty i cennik w 30 sekund
+              </h3>
+              <p class="text-sm text-zinc-600 leading-relaxed">
+                Dostajesz intuicyjny, lekki panel. Zmiana numeru telefonu, nowa usługa czy wgranie zdjęć jest tak proste jak wysłanie wiadomości. Bez obaw o awarie.
+              </p>
+            </div>
+
+            <div class="p-3.5 rounded-xl bg-white border border-zinc-200 text-xs font-bold text-zinc-700 flex items-center justify-between shadow-2xs">
+              <span>Stan edytora:</span>
+              <span class="text-emerald-700 flex items-center gap-1.5 font-extrabold">
+                <span class="w-2 h-2 rounded-full bg-emerald-500"></span> Zapisano natychmiast
+              </span>
+            </div>
+          </div>
+
+          <!-- Bento Tile 3 (Span 5): Prędkość Google -->
+          <div class="md:col-span-5 p-8 sm:p-10 rounded-3xl bg-zinc-950 text-white shadow-xl flex flex-col justify-between space-y-6 card-hover-depth-dark reveal-on-scroll delay-100">
+            <div class="space-y-4">
+              <div class="w-10 h-10 rounded-xl bg-zinc-900 border border-zinc-800 text-[#ccff00] flex items-center justify-center shadow-xs">
+                <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5 text-[#ccff00]" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                  <path stroke-linecap="round" stroke-linejoin="round" d="M13 10V3L4 14h7v7l9-11h-7z" />
+                </svg>
+              </div>
+              <h3 class="text-2xl font-extrabold tracking-tight text-white">
+                Błyskawiczne otwarcie: mniej niż 0.4 sekundy
+              </h3>
+              <p class="text-sm text-zinc-400 leading-relaxed">
+                Czysty, nowoczesny kod bez zbędnego balastu. Klient nie czeka ani sekundy, a wyszukiwarka Google faworyzuje Twoją stronę w wynikach wyszukiwania.
+              </p>
+            </div>
+
+            <div class="flex items-center gap-4 pt-2 border-t border-zinc-900">
+              <div class="text-4xl font-extrabold text-[#ccff00] tabular-nums">0.38s</div>
+              <div class="text-xs text-zinc-400 font-semibold border-l border-zinc-800 pl-4">
+                Średni czas otwarcia strony na telefonie
+              </div>
+            </div>
+          </div>
+
+          <!-- Bento Tile 4 (Span 7): Stała Opieka & Monitoring -->
+          <div class="md:col-span-7 p-8 sm:p-10 rounded-3xl bg-white border border-zinc-200 shadow-xs flex flex-col justify-between space-y-6 hover:border-zinc-300 transition-all card-hover-depth reveal-on-scroll delay-200">
+            <div class="space-y-3">
+              <div class="w-10 h-10 rounded-xl bg-[#ccff00] text-zinc-950 flex items-center justify-center shadow-xs">
+                <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5 text-zinc-950" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                  <path stroke-linecap="round" stroke-linejoin="round" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z" />
+                </svg>
+              </div>
+              <h3 class="text-2xl font-extrabold text-zinc-950 tracking-tight">
+                Stała opieka techniczna i monitoring (Abonament)
+              </h3>
+              <p class="text-sm sm:text-base text-zinc-600 leading-relaxed">
+                O stronę trzeba stale dbać od strony technicznej. W ramach abonamentu pilnuję działania serwera 24/7, odnawiania domeny i certyfikatów SSL oraz codziennych kopii zapasowych. Ty w ułamku sekundy edytujesz treści w panelu, a ja gwarantuję niezawodność fundamentów.
+              </p>
+            </div>
+
+            <div class="pt-4 border-t border-zinc-100 flex flex-wrap items-center gap-5 text-xs font-bold text-zinc-700">
+              <span class="flex items-center gap-1.5">
+                <svg xmlns="http://www.w3.org/2000/svg" class="w-3.5 h-3.5 text-emerald-600 shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="3">
+                  <path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7" />
+                </svg>
+                Kopie zapasowe 24/7
+              </span>
+              <span class="flex items-center gap-1.5">
+                <svg xmlns="http://www.w3.org/2000/svg" class="w-3.5 h-3.5 text-emerald-600 shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="3">
+                  <path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7" />
+                </svg>
+                Certyfikat SSL & Domena
+              </span>
+              <span class="flex items-center gap-1.5">
+                <svg xmlns="http://www.w3.org/2000/svg" class="w-3.5 h-3.5 text-emerald-600 shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="3">
+                  <path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7" />
+                </svg>
+                Monitoring dostępności 24/7
+              </span>
+            </div>
+          </div>
+
+        </div>
+      </div>
+    </section>
+
+    <!-- 3. Sekcja: Moje Prace (Siatka 3x2, małe kwadratowe klocki realizacji) -->
+    <section id="moje-prace" class="py-20 md:py-28 bg-white border-b border-[#e7e5e4]">
+      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div class="max-w-3xl mb-14 reveal-on-scroll">
+          <span class="text-xs font-extrabold uppercase tracking-wider text-zinc-400">Wybrane Realizacje</span>
+          <h2 class="text-3xl sm:text-5xl font-extrabold text-zinc-950 tracking-tight mt-1 mb-4">
+            Moje prace
+          </h2>
+          <p class="text-base sm:text-lg text-zinc-600 leading-relaxed">
+            Strony zaprojektowane z myślą o firmach usługowych. Bez przeładowania – czytelna oferta, błyskawiczny czas reakcji i natychmiastowy kontakt.
+          </p>
+        </div>
+
+        <!-- Siatka 3 w rzędzie, 2 rzędy (grid-cols-1 md:grid-cols-2 lg:grid-cols-3) -->
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+          {portfolioProjects.map((proj, pIdx) => (
+            <div class={`p-6 sm:p-7 rounded-3xl bg-[#fcfbfa] border border-zinc-200/90 shadow-xs flex flex-col justify-between hover:border-zinc-300 hover:shadow-md transition-all card-hover-depth group reveal-on-scroll delay-${((pIdx % 3) + 1) * 100}`}>
+              <div>
+                <!-- Mockup Kadr / Miniatura z metryką -->
+                <div class="w-full aspect-[16/10] rounded-2xl bg-gradient-to-br from-zinc-100 via-white to-zinc-100 border border-zinc-200 flex flex-col justify-between p-4 mb-5 relative overflow-hidden group-hover:border-zinc-300 transition-colors">
+                  <div class="flex items-center justify-between">
+                    <span class="text-xs font-extrabold text-zinc-500 uppercase tracking-wider">
+                      {proj.category}
+                    </span>
+                    <span class="w-2 h-2 rounded-full bg-[#ccff00] ring-4 ring-[#ccff00]/20"></span>
+                  </div>
+
+                  <!-- Centralna metryka w formie pigułki -->
+                  <div class="self-center text-center">
+                    <div class="inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-xl bg-zinc-950 text-white text-xs sm:text-sm font-extrabold shadow-sm">
+                      <span class="text-[#ccff00] font-mono">⚡</span>
+                      <span>{proj.metric}</span>
+                    </div>
+                    <div class="text-[11px] text-zinc-500 font-semibold mt-1">
+                      {proj.metricLabel}
+                    </div>
+                  </div>
+
+                  <div class="h-1 w-12 bg-zinc-200 rounded-full self-center"></div>
+                </div>
+
+                <h3 class="text-lg sm:text-xl font-extrabold text-zinc-950 tracking-tight mb-2 group-hover:text-zinc-700 transition-colors leading-snug">
+                  {proj.title}
+                </h3>
+
+                <p class="text-xs sm:text-sm text-zinc-600 leading-relaxed mb-4 line-clamp-3">
+                  {proj.desc}
+                </p>
+
+                <div class="space-y-1.5 mb-5 pt-3 border-t border-zinc-100">
+                  {proj.highlights.map((h) => (
+                    <div class="flex items-center gap-2 text-xs font-semibold text-zinc-700">
+                      <svg xmlns="http://www.w3.org/2000/svg" class="w-3.5 h-3.5 text-emerald-600 shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7" />
+                      </svg>
+                      <span class="truncate">{h}</span>
+                    </div>
+                  ))}
+                </div>
+              </div>
+
+              <div class="pt-4 border-t border-zinc-200/80 flex items-center justify-between">
+                <a
+                  href={`tel:${siteConfig.phoneRaw}`}
+                  class="inline-flex items-center gap-1.5 text-xs font-extrabold text-zinc-950 hover:text-black group/link"
+                >
+                  <span class="underline decoration-transparent group-hover/link:decoration-zinc-950 underline-offset-4 transition-all">Zamów podobną stronę</span>
+                  <svg xmlns="http://www.w3.org/2000/svg" class="w-3.5 h-3.5 group-hover/link:translate-x-1 transition-transform" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M14 5l7 7m0 0l-7 7m7-7H3" />
+                  </svg>
+                </a>
+              </div>
+            </div>
+          ))}
+        </div>
+      </div>
+    </section>
+
+    <!-- 4. Connected Process Timeline: Od rozmowy do wdrożenia -->
+    <section class="py-20 md:py-28 bg-[#f4f3f0] border-b border-[#e7e5e4]">
+      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div class="max-w-3xl mx-auto text-center mb-16 reveal-on-scroll">
+          <span class="text-xs font-extrabold uppercase tracking-wider text-zinc-400">Prosty 3-etapowy proces</span>
+          <h2 class="text-3xl sm:text-4xl lg:text-5xl font-extrabold text-zinc-950 tracking-tight mt-1 mb-4">
+            Od rozmowy do gotowej strony w 3–7 dni
+          </h2>
+          <p class="text-base sm:text-lg text-zinc-600 max-w-2xl mx-auto">
+            Szanuję Twój czas — całą pracę koncepcyjną, teksty i technikalia biorę na siebie.
+          </p>
+        </div>
+
+        <!-- Connected Timeline Grid -->
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-6 relative">
+          <!-- Step 1 -->
+          <div class="p-8 sm:p-9 rounded-3xl bg-white border border-zinc-200 shadow-sm flex flex-col justify-between space-y-5 process-step-card reveal-on-scroll delay-100">
+            <div class="flex items-center justify-between border-b border-zinc-100 pb-4">
+              <span class="w-9 h-9 rounded-full bg-zinc-950 text-white flex items-center justify-center text-sm font-extrabold">1</span>
+              <span class="text-xs font-bold text-zinc-400">15 minut</span>
+            </div>
+            <div>
+              <h3 class="text-xl font-extrabold text-zinc-950 tracking-tight mb-2">Rozmowa o Twoim biznesie</h3>
+              <p class="text-sm text-zinc-600 leading-relaxed">
+                Ustalamy czym dokładnie się zajmujesz, jakie zlecenia są dla Ciebie najbardziej opłacalne i na jakim obszarze działasz.
+              </p>
+            </div>
+            <div class="text-xs font-bold text-zinc-400">KROK 01</div>
+          </div>
+
+          <!-- Step 2 -->
+          <div class="p-8 sm:p-9 rounded-3xl bg-white border border-zinc-200 shadow-sm flex flex-col justify-between space-y-5 process-step-card reveal-on-scroll delay-200">
+            <div class="flex items-center justify-between border-b border-zinc-100 pb-4">
+              <span class="w-9 h-9 rounded-full bg-zinc-950 text-white flex items-center justify-center text-sm font-extrabold">2</span>
+              <span class="text-xs font-bold text-zinc-400">3 dni robocze</span>
+            </div>
+            <div>
+              <h3 class="text-xl font-extrabold text-zinc-950 tracking-tight mb-2">Przygotowanie tekstów i makiety</h3>
+              <p class="text-sm text-zinc-600 leading-relaxed">
+                Piszę konkretne teksty, projektuję układ pod smartfony i wysyłam Ci wersję roboczą do przetestowania na Twoim telefonie.
+              </p>
+            </div>
+            <div class="text-xs font-bold text-zinc-400">KROK 02</div>
+          </div>
+
+          <!-- Step 3 -->
+          <div class="p-8 sm:p-9 rounded-3xl bg-white border border-zinc-200 shadow-sm flex flex-col justify-between space-y-5 process-step-card reveal-on-scroll delay-300">
+            <div class="flex items-center justify-between border-b border-zinc-100 pb-4">
+              <span class="w-9 h-9 rounded-full bg-[#ccff00] text-zinc-950 flex items-center justify-center text-sm font-extrabold">3</span>
+              <span class="text-xs font-bold text-emerald-700">Finał</span>
+            </div>
+            <div>
+              <h3 class="text-xl font-extrabold text-zinc-950 tracking-tight mb-2">Uruchomienie i przekazanie panelu</h3>
+              <p class="text-sm text-zinc-600 leading-relaxed">
+                Podpinamy domenę, uruchamiamy formularze i przekazuję Ci prosty dostęp do panelu edycji. Wszystko jest w pełni przetestowane i gotowe na przyjęcie klientów.
+              </p>
+            </div>
+            <div class="text-xs font-bold text-zinc-950">KROK 03</div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Service Specific FAQ -->
+    <section class="py-20 md:py-28 bg-white border-b border-[#e7e5e4]">
+      <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div class="text-center mb-14">
+          <h2 class="text-3xl sm:text-4xl font-extrabold text-zinc-950 tracking-tight mb-4">
+            Pytania i odpowiedzi o tworzenie stron WWW
+          </h2>
+          <p class="text-base sm:text-lg text-zinc-600">
+            Wszystko, co warto wiedzieć przed wspólnym rozpoczęciem prac.
+          </p>
+        </div>
+
+        <div class="space-y-4">
+          {faqs.map((faq) => (
+            <div class="p-6 sm:p-8 rounded-3xl bg-[#fcfbfa] border border-zinc-200/90">
+              <h3 class="text-lg sm:text-xl font-extrabold text-zinc-950 mb-3">
+                {faq.q}
+              </h3>
+              <p class="text-sm sm:text-base text-zinc-600 leading-relaxed">
+                {faq.a}
+              </p>
+            </div>
+          ))}
+        </div>
+      </div>
+    </section>
+
+    <!-- Bottom Action Banner -->
+    <CallToAction />
+  </main>
+
+  <MobileCallButton />
+  <Footer />
+</Layout>
